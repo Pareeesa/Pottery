@@ -5,16 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pottery.R
 import com.example.pottery.adapters.FormulaAdapter
 import com.example.pottery.databinding.FragmentHomeBinding
 import com.example.pottery.room.Formula
 import com.example.pottery.room.Item
+import com.example.pottery.viewModels.FormulaViewModel
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding :FragmentHomeBinding
+    val viewModel: FormulaViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,15 +29,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = FormulaAdapter()
-        binding.recyclerView.adapter = adapter
-        val list = listOf(
-            Formula(1, listOf(Item(1,"sotb",200.0))),
-            Formula(2, listOf(Item(1,"sotb",200.0))),
-            Formula(3, listOf(Item(1,"sotb",200.0)))
-            )
-        adapter.submitList(list)
 
+        val formulaObserver = viewModel.formulaList?.observe(viewLifecycleOwner) { it ->
+            if (it != null) {
+                val adapter = FormulaAdapter()
+                binding.recyclerView.adapter = adapter
+                adapter.submitList(it)
+            }
+        }
         binding.btnAdd.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addFormulaFragment)
         }
