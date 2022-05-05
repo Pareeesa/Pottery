@@ -8,14 +8,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_marginBottom="8dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="50dp">
         <LinearLayout
-            android:padding="50dp"
+            android:padding="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#87D5CD"
@@ -23,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="50sp"
+                android:textSize="30sp"
                 android:text="@{Integer.valueOf(formula.id).toString()}"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
