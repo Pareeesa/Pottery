@@ -8,21 +8,22 @@ import androidx.room.TypeConverters
 
 @Database(entities = [Formula::class], version = 1)
 @TypeConverters(Converters::class)
-abstract class FormulaDataBase:RoomDatabase() {
+abstract class FormulaDataBase : RoomDatabase() {
 
-    abstract fun formulaDao(): FormulaDao
+    abstract fun formulaDao(): FormulaDao?
+
     companion object {
-
         private var INSTANCE: FormulaDataBase? = null
-
-        fun getDataBase(context: Context): FormulaDataBase? {
+        fun getDatabase(context: Context): FormulaDataBase? {
             if (INSTANCE == null) {
-                synchronized(FormulaDataBase::class) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        FormulaDataBase::class.java, "word.db"
-                    ).allowMainThreadQueries()
-                        .build()
+                synchronized(FormulaDataBase::class.java) {
+                    if (INSTANCE == null) {
+                        INSTANCE = Room.databaseBuilder(
+                            context.applicationContext,
+                            FormulaDataBase::class.java, "formula_database"
+                        ).allowMainThreadQueries()
+                            .build()
+                    }
                 }
             }
             return INSTANCE
