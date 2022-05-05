@@ -18,5 +18,10 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
             repository.insert(formula)
         }
     }
+    fun findFormula(id:Int):Formula?{
+        return repository.findFormula(id)
+    }
+    fun update(formula: Formula) = repository.update(formula)
+
 }
 

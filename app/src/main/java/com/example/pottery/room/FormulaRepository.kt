@@ -23,4 +23,9 @@ class FormulaRepository(application: Application?) {
     }
 
     fun insert(formula: Formula) = formulaDao?.addFormula(formula)
+    fun update(formula: Formula) = formulaDao?.update(formula)
+
+    fun findFormula(id:Int):Formula?{
+        return formulaDao?.findFormulaById(id)
+    }
 }
