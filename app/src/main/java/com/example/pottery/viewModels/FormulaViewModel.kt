@@ -5,15 +5,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.pottery.room.Formula
 import com.example.pottery.room.FormulaRepository
+import com.example.pottery.room.Item
 
-class FormulaViewModel(app: Application) : AndroidViewModel(app)  {
+class FormulaViewModel(app: Application) : AndroidViewModel(app) {
     private var repository = FormulaRepository()
+    var formulaList: LiveData<List<Formula>>
 
     init {
         repository.initDB(app.applicationContext)
+        formulaList = repository.formulaList
     }
 
-    fun addWord(formula:Formula) {
+    fun addFormula(formula: Formula) {
         repository.addFormula(formula)
     }
 }
