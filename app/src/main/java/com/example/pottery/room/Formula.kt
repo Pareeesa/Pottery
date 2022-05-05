@@ -6,4 +6,5 @@ import androidx.room.PrimaryKey
 @Entity
 data class Formula(
     @PrimaryKey(autoGenerate = true) var id:Int,
+    var itemList:List<Item>
 )
