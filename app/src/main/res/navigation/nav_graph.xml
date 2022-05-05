@@ -26,5 +26,9 @@
         android:id="@+id/addFormulaFragment"
         android:name="com.example.pottery.ui.AddFormulaFragment"
         android:label="fragment_add_formula"
-        tools:layout="@layout/fragment_add_formula" />
+        tools:layout="@layout/fragment_add_formula" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>
