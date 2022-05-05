@@ -39,9 +39,9 @@ class HomeFragment : Fragment() {
         }
         binding.btnAdd.setOnClickListener {
             viewModel.insert(Formula(0, arrayListOf()))
-            val action = HomeFragmentDirections.actionHomeFragmentToAddFormulaFragment(viewModel.getLast()?.id!!)
+            val action = HomeFragmentDirections.actionHomeFragmentToAddFormulaFragment(1)
             findNavController().navigate(action)
-            findNavController().navigate(R.id.action_homeFragment_to_addFormulaFragment)
+            //findNavController().navigate(R.id.action_homeFragment_to_addFormulaFragment)
         }
     }
 }
