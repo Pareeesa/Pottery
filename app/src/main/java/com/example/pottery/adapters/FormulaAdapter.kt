@@ -9,9 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pottery.R
 import com.example.pottery.databinding.FormulaItemViewBinding
 import com.example.pottery.room.Formula
-import java.util.logging.Handler
 
-class FormulaAdapter(private val clickHandler: Handler):
+class FormulaAdapter:
     ListAdapter<Formula, FormulaAdapter.ItemHolder>(WordDiffCallBack) {
     object WordDiffCallBack: DiffUtil.ItemCallback<Formula>() {
         override fun areItemsTheSame(oldItem: Formula, newItem: Formula): Boolean {
