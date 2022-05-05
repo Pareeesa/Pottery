@@ -10,4 +10,5 @@
     <string name="amount">Amount</string>
     <string name="id">Id</string>
     <string name="save">Save</string>
+    <string name="formula_id">Formula Id</string>
 </resources>
