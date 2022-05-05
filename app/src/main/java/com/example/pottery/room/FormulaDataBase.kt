@@ -7,8 +7,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(entities = [Formula::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class FormulaDataBase:RoomDatabase() {
-    @TypeConverters(Converters::class)
+
     abstract fun formulaDao(): FormulaDao
     companion object {
 
