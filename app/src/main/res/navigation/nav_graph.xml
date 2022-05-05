@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.pottery.HomeFragment"
+        android:name="com.example.pottery.ui.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/formulaFragment"
-        android:name="com.example.pottery.FormulaFragment"
+        android:name="com.example.pottery.ui.FormulaFragment"
         android:label="fragment_formula"
         tools:layout="@layout/fragment_formula" />
     <fragment
         android:id="@+id/addFormulaFragment"
-        android:name="com.example.pottery.AddFormulaFragment"
+        android:name="com.example.pottery.ui.AddFormulaFragment"
         android:label="fragment_add_formula"
         tools:layout="@layout/fragment_add_formula" />
 </navigation>
