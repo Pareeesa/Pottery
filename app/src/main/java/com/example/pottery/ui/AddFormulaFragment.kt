@@ -1,29 +1,21 @@
 package com.example.pottery.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.example.pottery.R
 import com.example.pottery.databinding.FragmentAddFormulaBinding
-import com.example.pottery.databinding.FragmentHomeBinding
 import com.example.pottery.room.Formula
 import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
-import java.util.*
 
 class AddFormulaFragment : Fragment() {
 
     private lateinit var binding: FragmentAddFormulaBinding
-    //private val viewModel: FormulaViewModel by viewModels()
-    val args:AddFormulaFragmentArgs by navArgs()
+    private val viewModel: FormulaViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,24 +27,29 @@ class AddFormulaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvId.text = args.id.toString()
-//        binding.btnAddItem.setOnClickListener {
-//            if (hasEmptyField()) {
-//                checkForErrors()
-//                return@setOnClickListener
-//            }
-//            var lastFormulaItemList = viewModel.getLast()?.itemList
-//            lastFormulaItemList?.add(Item(binding.etId.text.toString().toInt(),binding.etMaterial.text.toString(),
-//                binding.etAmount.text.toString().toDouble()))
-//            lastFormulaItemList?.let { it1 -> Formula(args.id, it1) }?.let { it2 ->
-//                viewModel.update(
-//                    it2
-//                )
-//            }
-//        }
+
+        binding.btnAddItem.setOnClickListener {
+            if (hasEmptyField()) {
+                checkForErrors()
+                return@setOnClickListener
+            }
+            val formula =viewModel.findFormula(binding.etFormulaId.text.toString().toInt())
+            val item = Item(
+                binding.etId.text.toString().toInt(),
+                binding.etMaterial.text.toString(),
+                binding.etAmount.text.toString().toDouble()
+            )
+            if (formula != null){
+                val arraylist = formula.itemList
+                arraylist.plus(item)
+                viewModel.update(formula)
+            }else
+                viewModel.insert(Formula(0, arrayListOf(item)))
+        }
+
     }
     private fun hasEmptyField(): Boolean {
-        return (binding.etId.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
+        return (binding.etFormulaId.text.isNullOrEmpty() ||binding.etId.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
                 binding.etAmount.text.isNullOrEmpty())
     }
 
@@ -60,6 +57,7 @@ class AddFormulaFragment : Fragment() {
         setError(binding.etId)
         setError(binding.etMaterial)
         setError(binding.etAmount)
+        setError(binding.etFormulaId)
     }
 
     private fun setError(editText: EditText) {
