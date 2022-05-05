@@ -7,7 +7,7 @@ class Converters {
     fun stringFromItemList(itemList: List<Item>): String {
         var string = ""
         for (item in itemList)
-            string += item.id.toString() + ',' + item.material + ',' + item.amount.toString()
+            string += item.id.toString() + "," + item.material + "," + item.amount.toString() + "-"
         return string
     }
 
@@ -15,7 +15,7 @@ class Converters {
     fun stringToItem(string: String): List<Item> {
 
         val itemList = arrayListOf<Item>()
-        val items = string.split(',')
+        val items = string.split('-')
         for (str in items){
             if (str.isBlank())
                 break
