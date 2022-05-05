@@ -1,27 +1,26 @@
 package com.example.pottery.room
 
-import android.content.Context
+import android.app.Application
 import androidx.lifecycle.LiveData
 
-class FormulaRepository {
+class FormulaRepository(application: Application?) {
 
-    var formulaDatabase : FormulaDataBase?=null
-    var formulaDao : FormulaDao?=null
-    lateinit var formulaList : LiveData<List<Formula>>
+    private var formulaDao: FormulaDao? = null
+    private var formulaList: LiveData<List<Formula>?>? = null
 
-
-    fun initDB(context: Context){
-        formulaDatabase= FormulaDataBase.getDataBase(context)
-        formulaDao=formulaDatabase?.formulaDao()
-        testData()
-        formulaList = formulaDao?.getAll()!!
+    init {
+        wordRepository(application)
     }
 
-    fun addFormula(formula: Formula) = formulaDao?.addFormula(formula)
-    fun testData() {
-        formulaDao?.addFormula(Formula(1, listOf(Item(1,"sotb",200.0))))
-        formulaDao?.addFormula(Formula(1, listOf(Item(1,"sotb",200.0))))
-        formulaDao?.addFormula(Formula(1, listOf(Item(1,"sotb",200.0))))
-        formulaDao?.addFormula(Formula(1, listOf(Item(1,"sotb",200.0))))
+    private fun wordRepository(application: Application?) {
+        val db = FormulaDataBase.getDatabase(application!!)
+        formulaDao = db!!.formulaDao()
+        formulaList = formulaDao!!.getAll()
     }
+
+    fun getAllFormula(): LiveData<List<Formula>?>? {
+        return formulaList
+    }
+
+    fun insert(formula: Formula) = formulaDao?.addFormula(formula)
 }
