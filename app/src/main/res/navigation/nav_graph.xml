@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.pottery.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_formulaFragment"
+            app:destination="@id/formulaFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addFormulaFragment"
+            app:destination="@id/addFormulaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/formulaFragment"
+        android:name="com.example.pottery.FormulaFragment"
+        android:label="fragment_formula"
+        tools:layout="@layout/fragment_formula" />
+    <fragment
+        android:id="@+id/addFormulaFragment"
+        android:name="com.example.pottery.AddFormulaFragment"
+        android:label="fragment_add_formula"
+        tools:layout="@layout/fragment_add_formula" />
 </navigation>
