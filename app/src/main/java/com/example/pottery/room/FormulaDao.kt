@@ -12,5 +12,5 @@ interface FormulaDao {
     fun addFormula(formula: Formula)
 
     @Query("SELECT * FROM Formula")
-    fun getAll():LiveData<List<Formula>>
+    fun getAll():LiveData<List<Formula>?>?
 }
