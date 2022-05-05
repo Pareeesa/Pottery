@@ -40,9 +40,7 @@ class AddFormulaFragment : Fragment() {
                 binding.etAmount.text.toString().toDouble()
             )
             if (formula != null){
-                val arraylist = formula.itemList
-                arraylist.plus(item)
-                viewModel.update(formula)
+                viewModel.update(Formula(formula.id,formula.itemList.plus(item)))
             }else
                 viewModel.insert(Formula(0, arrayListOf(item)))
         }
