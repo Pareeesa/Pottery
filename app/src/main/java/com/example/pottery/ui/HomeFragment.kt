@@ -30,7 +30,9 @@ class HomeFragment : Fragment() {
 
         viewModel.formulaList?.observe(viewLifecycleOwner) { it ->
             if (it != null) {
-                val adapter = FormulaAdapter()
+                val adapter = FormulaAdapter{
+                   findNavController().navigate(R.id.action_homeFragment_to_formulaFragment)
+                }
                 binding.recyclerView.adapter = adapter
                 adapter.submitList(it)
             }
