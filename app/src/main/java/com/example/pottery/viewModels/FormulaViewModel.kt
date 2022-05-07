@@ -12,16 +12,12 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
 
     private val repository: FormulaRepository = FormulaRepository(application)
     val formulaList: LiveData<List<Formula>?>? = repository.getAllFormula()
-    val itemListLiveData = MutableLiveData<MutableList<Item>>()
-    private val itemsArrayList = ArrayList<Item>()
+    val itemListLiveData = MutableLiveData<List<Item>>()
 
     fun addItem(item: Item) {
-        itemsArrayList.add(item)
-        itemListLiveData.value = itemsArrayList
+        itemListLiveData.value = itemListLiveData.value?.plus(item)
     }
-    /*init {
-        insert(Formula(0,listOf(Item(0,"",0.0))))
-    }*/
+
     fun insert(formula: Formula?) {
         if (formula != null) {
             repository.insert(formula)
@@ -31,6 +27,10 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
         return repository.findFormula(id)
     }
     fun update(formula: Formula) = repository.update(formula)
+
+    fun findFormulaByName(name:String):Formula?{
+        return repository.findFormulaByName(name)
+    }
 
 }
 
