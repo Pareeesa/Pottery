@@ -33,22 +33,22 @@ class AddFormulaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ItemAdapter()
-        viewModel.itemListLiveData.observe(viewLifecycleOwner){
+        viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             binding.recyclerView.adapter = adapter
             adapter.submitList(it)
         }
 
         binding.btnCreate.setOnClickListener {
-            if (binding.etFormulaName.text.isNullOrEmpty()){
+            if (binding.etFormulaName.text.isNullOrEmpty()) {
                 setError(binding.etFormulaName)
                 return@setOnClickListener
             }
-            if (viewModel.findFormulaByName(binding.etFormulaName.text.toString()) != null){
-                Toast.makeText(requireContext(), "این فرمول قبلا ایجاد شده", Toast.LENGTH_SHORT).show()
+            if (viewModel.findFormulaByName(binding.etFormulaName.text.toString()) != null) {
+                Toast.makeText(requireContext(), "این فرمول قبلا ایجاد شده", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
-            }
-            else{
-                viewModel.insert(Formula(0,binding.etFormulaName.text.toString(),listOf()))
+            } else {
+                viewModel.insert(Formula(0, binding.etFormulaName.text.toString(), listOf()))
                 binding.addItemCardView.visibility = View.VISIBLE
                 binding.rvLayout.visibility = View.VISIBLE
             }
@@ -67,23 +67,30 @@ class AddFormulaFragment : Fragment() {
     }
 
     private fun addItem() {
-        viewModel.addItem(
-            Item(
-                binding.etId.text.toString().toInt(),
-                binding.etMaterial.text.toString(),
-                binding.etAmount.text.toString().toDouble()),binding.etFormulaName.text.toString()
-        )
+        val item = Item(
+            binding.etId.text.toString().toInt(),
+            binding.etMaterial.text.toString(),
+            binding.etAmount.text.toString().toDouble())
+
+        if (viewModel.itemIsNew(item,binding.etFormulaName.text.toString())) {
+            viewModel.addItem(item, binding.etFormulaName.text.toString())
+            return
+        }
+        Toast.makeText(requireContext(), "ایتم تکراری!", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun hasEmptyField(): Boolean {
         return (binding.etId.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
                 binding.etAmount.text.isNullOrEmpty())
     }
+
     private fun checkForErrors() {
         setError(binding.etId)
         setError(binding.etMaterial)
         setError(binding.etAmount)
     }
+
     private fun setError(editText: EditText) {
         if (editText.text.isNullOrEmpty())
             editText.error = "Must be filled"

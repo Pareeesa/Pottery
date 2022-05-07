@@ -38,5 +38,13 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
         return repository.findFormulaByName(name)
     }
 
+    fun itemIsNew(item: Item,name: String): Boolean {
+        val formula = findFormulaByName(name)
+        if (formula != null)
+            return !(formula.itemList.contains(item))
+
+        return true
+    }
+
 }
 
