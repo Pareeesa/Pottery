@@ -70,7 +70,7 @@ class AddFormulaFragment : Fragment() {
         val item = Item(
             binding.etId.text.toString().toInt(),
             binding.etMaterial.text.toString(),
-            binding.etAmount.text.toString().toDouble())
+            binding.etAmount.text.toString().toInt())
 
         if (viewModel.itemIsNew(item,binding.etFormulaName.text.toString())) {
             viewModel.addItem(item, binding.etFormulaName.text.toString())
