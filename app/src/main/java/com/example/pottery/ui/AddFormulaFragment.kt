@@ -71,7 +71,7 @@ class AddFormulaFragment : Fragment() {
             Item(
                 binding.etId.text.toString().toInt(),
                 binding.etMaterial.text.toString(),
-                binding.etAmount.text.toString().toDouble())
+                binding.etAmount.text.toString().toDouble()),binding.etFormulaName.text.toString()
         )
     }
 

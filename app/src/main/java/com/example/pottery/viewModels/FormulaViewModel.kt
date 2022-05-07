@@ -14,8 +14,14 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
     val formulaList: LiveData<List<Formula>?>? = repository.getAllFormula()
     val itemListLiveData = MutableLiveData<List<Item>>()
 
-    fun addItem(item: Item) {
-        itemListLiveData.value = itemListLiveData.value?.plus(item)
+    fun addItem(item: Item,formulaName:String) {
+        if (itemListLiveData.value != null)
+            itemListLiveData.value = itemListLiveData.value?.plus(item)
+        else
+            itemListLiveData.value = listOf(item)
+        val formula = repository.findFormulaByName(formulaName)
+        if (formula != null)
+            repository.update(Formula(formula.id,formulaName, itemListLiveData.value!!))
     }
 
     fun insert(formula: Formula?) {
