@@ -9,10 +9,10 @@ class FormulaRepository(application: Application?) {
     private var formulaList: LiveData<List<Formula>?>? = null
 
     init {
-        wordRepository(application)
+        formulaRepository(application)
     }
 
-    private fun wordRepository(application: Application?) {
+    private fun formulaRepository(application: Application?) {
         val db = FormulaDataBase.getDatabase(application!!)
         formulaDao = db!!.formulaDao()
         formulaList = formulaDao!!.getAll()
@@ -27,5 +27,8 @@ class FormulaRepository(application: Application?) {
 
     fun findFormula(id:Int):Formula?{
         return formulaDao?.findFormulaById(id)
+    }
+    fun findFormulaByName(name:String):Formula?{
+        return formulaDao?.findFormulaByName(name)
     }
 }
