@@ -25,7 +25,7 @@ class ItemAdapter: ListAdapter<Item, ItemAdapter.ItemHolder>(ItemDiffCallBack) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         val binding: ItemViewBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.formula_item_view,
+            R.layout.item_view,
             parent,
             false
         )
