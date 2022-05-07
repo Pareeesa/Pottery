@@ -20,7 +20,7 @@ class Converters {
             if (str.isBlank())
                 break
             val item = str.split(',')
-            itemList.add(Item(item[0].toInt(),item[1],item[2].toDouble()))
+            itemList.add(Item(item[0].toInt(),item[1],item[2].toInt()))
         }
         return itemList
     }
