@@ -11,4 +11,7 @@
     <string name="id">Id</string>
     <string name="save">Save</string>
     <string name="formula_id">Formula Id</string>
+    <string name="save">Save</string>
+    <string name="create">Create</string>
+    <string name="formula_name">Formula name</string>
 </resources>
