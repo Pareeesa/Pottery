@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.pottery.R
 import com.example.pottery.adapters.ItemAdapter
 import com.example.pottery.databinding.FragmentAddFormulaBinding
 import com.example.pottery.room.Formula
@@ -17,7 +20,6 @@ class AddFormulaFragment : Fragment() {
 
     private lateinit var binding: FragmentAddFormulaBinding
     private val viewModel: FormulaViewModel by viewModels()
-    val list : MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,38 +38,52 @@ class AddFormulaFragment : Fragment() {
             adapter.submitList(it)
         }
 
+        binding.btnCreate.setOnClickListener {
+            if (binding.etFormulaName.text.isNullOrEmpty()){
+                setError(binding.etFormulaName)
+                return@setOnClickListener
+            }
+            if (viewModel.findFormulaByName(binding.etFormulaName.text.toString()) != null){
+                Toast.makeText(requireContext(), "این فرمول قبلا ایجاد شده", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else{
+                viewModel.insert(Formula(0,binding.etFormulaName.text.toString(),listOf()))
+                binding.addItemCardView.visibility = View.VISIBLE
+                binding.rvLayout.visibility = View.VISIBLE
+            }
+        }
         binding.btnAddItem.setOnClickListener {
             if (hasEmptyField()) {
                 checkForErrors()
                 return@setOnClickListener
             }
-            viewModel.addItem(
-                Item(
+            addItem()
+        }
+        binding.btnSave.setOnClickListener {
+            findNavController().navigate(R.id.action_addFormulaFragment_to_homeFragment)
+            Toast.makeText(requireContext(), "saved!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun addItem() {
+        viewModel.addItem(
+            Item(
                 binding.etId.text.toString().toInt(),
                 binding.etMaterial.text.toString(),
                 binding.etAmount.text.toString().toDouble())
-            )
-        }
-        binding.btnSave.setOnClickListener {
-            val formula =viewModel.findFormula(binding.etFormulaId.text.toString().toInt())
-            if (formula != null){
-                viewModel.update(Formula(formula.id,formula.itemList.plus(list)))
-            }else
-                viewModel.insert(Formula(0, list))
-        }
-    }
-    private fun hasEmptyField(): Boolean {
-        return (binding.etFormulaId.text.isNullOrEmpty() ||binding.etId.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
-                binding.etAmount.text.isNullOrEmpty())
+        )
     }
 
+    private fun hasEmptyField(): Boolean {
+        return (binding.etId.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
+                binding.etAmount.text.isNullOrEmpty())
+    }
     private fun checkForErrors() {
         setError(binding.etId)
         setError(binding.etMaterial)
         setError(binding.etAmount)
-        setError(binding.etFormulaId)
     }
-
     private fun setError(editText: EditText) {
         if (editText.text.isNullOrEmpty())
             editText.error = "Must be filled"
