@@ -15,6 +15,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="cursive"
         android:text="Pottery"
+        android:textColor="@color/dark"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintHorizontal_bias="0.485"
