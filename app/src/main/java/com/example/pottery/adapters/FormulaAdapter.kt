@@ -2,6 +2,7 @@ package com.example.pottery.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,9 @@ import com.example.pottery.R
 import com.example.pottery.databinding.FormulaItemViewBinding
 import com.example.pottery.room.Formula
 typealias ClickHandler = (Formula) -> Unit
-class FormulaAdapter(private val clickHandler: ClickHandler):
+typealias ClickHandlerDelete = (Formula) -> Unit
+typealias ClickHandleEdit = (Formula) -> Unit
+class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHandlerD: ClickHandlerDelete,private val clickHandlerE: ClickHandleEdit):
     ListAdapter<Formula, FormulaAdapter.ItemHolder>(FormulaDiffCallBack) {
     object FormulaDiffCallBack: DiffUtil.ItemCallback<Formula>() {
         override fun areItemsTheSame(oldItem: Formula, newItem: Formula): Boolean {
@@ -36,7 +39,13 @@ class FormulaAdapter(private val clickHandler: ClickHandler):
     }
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.formula = getItem(position)
-        holder.binding.ll.setOnClickListener {
+        holder.binding.imageViewDelete.setOnClickListener {
+            clickHandlerD.invoke(getItem(position))
+        }
+        holder.binding.imageViewEdit.setOnClickListener {
+            clickHandlerE.invoke(getItem(position))
+        }
+        holder.binding.cv.setOnClickListener {
             clickHandler.invoke(getItem(position))
         }
     }

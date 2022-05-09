@@ -46,5 +46,9 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
         return true
     }
 
+    fun deleteFormula(formula:Formula) {
+        repository.deleteFormula(formula)
+    }
+
 }
 
