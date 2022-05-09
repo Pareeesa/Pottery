@@ -44,7 +44,7 @@ class AddFormulaFragment : Fragment() {
                 return@setOnClickListener
             }
             if (viewModel.findFormulaByName(binding.etFormulaName.text.toString()) != null) {
-                Toast.makeText(requireContext(), "این فرمول قبلا ایجاد شده", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.`already_exist_ّFormula`, Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             } else {
@@ -62,7 +62,7 @@ class AddFormulaFragment : Fragment() {
         }
         binding.btnSave.setOnClickListener {
             findNavController().navigate(R.id.action_addFormulaFragment_to_homeFragment)
-            Toast.makeText(requireContext(), "saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),R.string.successfully_saved, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -76,7 +76,7 @@ class AddFormulaFragment : Fragment() {
             viewModel.addItem(item, binding.etFormulaName.text.toString())
             return
         }
-        Toast.makeText(requireContext(), "ایتم تکراری!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.`already_exist_ّItem`, Toast.LENGTH_SHORT).show()
 
     }
 

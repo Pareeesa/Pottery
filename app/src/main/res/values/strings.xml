@@ -13,4 +13,7 @@
     <string name="formula_id">Formula Id</string>
     <string name="create">Create</string>
     <string name="formula_name">Formula name</string>
+    <string name="already_exist_ّFormula">This formula already exists!!</string>
+    <string name="already_exist_ّItem">This Item already exists!!</string>
+    <string name="successfully_saved"> Saved successfully! </string>
 </resources>
