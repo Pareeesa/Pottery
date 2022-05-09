@@ -13,7 +13,7 @@ import com.example.pottery.room.Formula
 typealias ClickHandler = (Formula) -> Unit
 typealias ClickHandlerDelete = (Formula) -> Unit
 typealias ClickHandleEdit = (Formula) -> Unit
-class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHandlerD: ClickHandlerDelete):
+class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHandlerD: ClickHandlerDelete,private val clickHandlerE: ClickHandleEdit):
     ListAdapter<Formula, FormulaAdapter.ItemHolder>(FormulaDiffCallBack) {
     object FormulaDiffCallBack: DiffUtil.ItemCallback<Formula>() {
         override fun areItemsTheSame(oldItem: Formula, newItem: Formula): Boolean {
@@ -43,7 +43,7 @@ class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHan
             clickHandlerD.invoke(getItem(position))
         }
         holder.binding.imageViewEdit.setOnClickListener {
-
+            clickHandlerE.invoke(getItem(position))
         }
         holder.binding.cv.setOnClickListener {
             clickHandler.invoke(getItem(position))

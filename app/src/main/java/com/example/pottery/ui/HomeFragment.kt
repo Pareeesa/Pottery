@@ -39,6 +39,9 @@ class HomeFragment : Fragment() {
                 },
                     {
                         deleteFormula(it)
+                    },
+                    {
+                        findNavController().navigate(R.id.action_homeFragment_to_editFragment)
                     }
                 )
                 binding.recyclerView.adapter = adapter
