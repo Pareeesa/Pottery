@@ -31,4 +31,8 @@ class FormulaRepository(application: Application?) {
     fun findFormulaByName(name:String):Formula?{
         return formulaDao?.findFormulaByName(name)
     }
+    fun deleteFormula(formula:Formula) {
+        formulaDao?.delete(formula)
+    }
+
 }
