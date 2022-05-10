@@ -4,15 +4,22 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.example.pottery.room.Formula
 import com.example.pottery.room.FormulaRepository
 import com.example.pottery.room.Item
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 
 class FormulaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: FormulaRepository = FormulaRepository(application)
-    val formulaList: LiveData<List<Formula>?>? = repository.getAllFormula()
     val itemListLiveData = MutableLiveData<List<Item>>()
+    val searchQuery = MutableLiveData("")
+    private val formulamap =Transformations.switchMap(searchQuery) {
+        repository.searchDb(it)
+    }
+    val formulaList: LiveData<List<Formula>?> = formulamap
 
     fun addItem(item: Item,formulaName:String) {
         if (itemListLiveData.value != null)
@@ -49,6 +56,5 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
     fun deleteFormula(formula:Formula) {
         repository.deleteFormula(formula)
     }
-
 }
 

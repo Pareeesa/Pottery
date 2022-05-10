@@ -2,6 +2,7 @@ package com.example.pottery.room
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 class FormulaRepository(application: Application?) {
 
@@ -33,6 +34,9 @@ class FormulaRepository(application: Application?) {
     }
     fun deleteFormula(formula:Formula) {
         formulaDao?.delete(formula)
+    }
+    fun searchDb(searchQuery :String): LiveData<List<Formula>?>{
+        return formulaDao?.search(searchQuery)!!
     }
 
 }

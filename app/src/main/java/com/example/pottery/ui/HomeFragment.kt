@@ -1,10 +1,9 @@
 package com.example.pottery.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +24,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.formulaList?.observe(viewLifecycleOwner) { it ->
+        viewModel.formulaList.observe(viewLifecycleOwner) { it ->
             if (it != null) {
                 val adapter = FormulaAdapter({
                     findNavController().navigate(R.id.action_homeFragment_to_formulaFragment)
@@ -67,4 +67,37 @@ class HomeFragment : Fragment() {
                 .show()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu,menu)
+
+        val searchItem = menu.findItem(R.id.menu_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.onQueryTextChanged {
+            viewModel.searchQuery.value = it
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.menu_search -> {
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+}
+inline fun SearchView.onQueryTextChanged(crossinline listener: (String) -> Unit) {
+    this.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            listener(newText.orEmpty())
+            return true
+        }
+
+    })
 }
