@@ -9,6 +9,7 @@
     </data>
 
     <LinearLayout
+        android:background="@color/mid_yellow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@{Integer.valueOf(item.id).toString()}" />
+            android:text="@{Integer.valueOf(item.code).toString()}" />
 
         <TextView
             android:layout_width="wrap_content"
