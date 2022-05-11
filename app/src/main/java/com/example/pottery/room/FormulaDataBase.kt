@@ -6,11 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [Formula::class], version = 1)
-@TypeConverters(Converters::class)
+@Database(entities = [Formula::class,Item::class], version = 1)
+
 abstract class FormulaDataBase : RoomDatabase() {
 
     abstract fun formulaDao(): FormulaDao?
+    abstract fun itemDao(): ItemDao?
 
     companion object {
         private var INSTANCE: FormulaDataBase? = null
