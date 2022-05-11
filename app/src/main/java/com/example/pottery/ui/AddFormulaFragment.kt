@@ -75,7 +75,7 @@ class AddFormulaFragment : Fragment() {
             binding.etMaterial.text.toString(),
             binding.etAmount.text.toString().toInt())
 
-        if (viewModel.itemIsNew(item)){
+        if (!viewModel.isItemRepeated(item)){
             viewModel.addItem(item)
             return
         }

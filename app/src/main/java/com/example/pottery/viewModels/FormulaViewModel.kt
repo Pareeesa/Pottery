@@ -39,8 +39,8 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
         return repository.findFormulaByName(name)
     }
 
-    fun itemIsNew(item: Item): Boolean {
-        return !repository.isItemRepeated(item)
+    fun isItemRepeated(item: Item): Boolean {
+        return repository.isItemRepeated(item)
     }
 
     fun deleteFormula(formula:Formula) {

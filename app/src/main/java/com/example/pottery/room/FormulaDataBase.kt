@@ -11,7 +11,6 @@ import androidx.room.TypeConverters
 abstract class FormulaDataBase : RoomDatabase() {
 
     abstract fun formulaDao(): FormulaDao?
-    abstract fun itemDao(): ItemDao?
 
     companion object {
         private var INSTANCE: FormulaDataBase? = null
