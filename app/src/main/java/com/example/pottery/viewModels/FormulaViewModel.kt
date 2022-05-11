@@ -7,54 +7,47 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.pottery.room.Formula
 import com.example.pottery.room.FormulaRepository
+import com.example.pottery.room.FormulaWithItems
 import com.example.pottery.room.Item
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 
 class FormulaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: FormulaRepository = FormulaRepository(application)
     val itemListLiveData = MutableLiveData<List<Item>>()
     val searchQuery = MutableLiveData("")
-    private val formulamap =Transformations.switchMap(searchQuery) {
+    private val formulaMap =Transformations.switchMap(searchQuery) {
         repository.searchDb(it)
     }
-    val formulaList: LiveData<List<Formula>?> = formulamap
+    val formulaList: LiveData<List<Formula>?> = formulaMap
 
-    fun addItem(item: Item,formulaName:String) {
-        if (itemListLiveData.value != null)
-            itemListLiveData.value = itemListLiveData.value?.plus(item)
-        else
+    fun addItem(item: Item) {
+        repository.addItem(item)
+        if (itemListLiveData.value == null){
             itemListLiveData.value = listOf(item)
-        val formula = repository.findFormulaByName(formulaName)
-        if (formula != null)
-            repository.update(Formula(formula.id,formulaName, itemListLiveData.value!!))
-    }
-
-    fun insert(formula: Formula?) {
-        if (formula != null) {
-            repository.insert(formula)
+        }else{
+        itemListLiveData.value = itemListLiveData.value?.plus(item)
         }
     }
-    fun findFormula(id:Int):Formula?{
-        return repository.findFormula(id)
+
+    fun insertFormula(formula: Formula) {
+        repository.insert(formula)
     }
+
     fun update(formula: Formula) = repository.update(formula)
 
-    fun findFormulaByName(name:String):Formula?{
+    fun findFormulaByName(name:String):LiveData<List<FormulaWithItems>?>?{
         return repository.findFormulaByName(name)
     }
 
-    fun itemIsNew(item: Item,name: String): Boolean {
-        val formula = findFormulaByName(name)
-        if (formula != null)
-            return !(formula.itemList.contains(item))
-
-        return true
+    fun itemIsNew(item: Item): Boolean {
+        return !repository.isItemRepeated(item)
     }
 
     fun deleteFormula(formula:Formula) {
         repository.deleteFormula(formula)
+    }
+    fun isFormulaNew(name: String):Boolean{
+        return repository.isFormulaNew(name)
     }
 }
 
