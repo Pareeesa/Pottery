@@ -34,8 +34,10 @@ class AddFormulaFragment : Fragment() {
 
         val adapter = ItemAdapter()
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
+            if (it != null){
             binding.recyclerView.adapter = adapter
             adapter.submitList(it)
+            }
         }
 
         binding.btnCreate.setOnClickListener {
@@ -43,12 +45,12 @@ class AddFormulaFragment : Fragment() {
                 setError(binding.etFormulaName)
                 return@setOnClickListener
             }
-            if (viewModel.findFormulaByName(binding.etFormulaName.text.toString()) != null) {
+            if (!viewModel.isFormulaNew(binding.etFormulaName.text.toString())) {
                 Toast.makeText(requireContext(), R.string.`already_exist_ّFormula`, Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             } else {
-                viewModel.insert(Formula(0, binding.etFormulaName.text.toString(), listOf()))
+                viewModel.insertFormula(Formula(0, binding.etFormulaName.text.toString()))
                 binding.addItemCardView.visibility = View.VISIBLE
                 binding.rvLayout.visibility = View.VISIBLE
             }
@@ -58,7 +60,7 @@ class AddFormulaFragment : Fragment() {
                 checkForErrors()
                 return@setOnClickListener
             }
-            addItem()
+            addItem(binding.etFormulaName.text.toString())
         }
         binding.btnSave.setOnClickListener {
             findNavController().navigate(R.id.action_addFormulaFragment_to_homeFragment)
@@ -66,14 +68,15 @@ class AddFormulaFragment : Fragment() {
         }
     }
 
-    private fun addItem() {
-        val item = Item(
-            binding.etId.text.toString().toInt(),
+    private fun addItem(formulaName :String) {
+        val item = Item(0,
+            binding.etCode.text.toString(),
+            formulaName,
             binding.etMaterial.text.toString(),
             binding.etAmount.text.toString().toInt())
 
-        if (viewModel.itemIsNew(item,binding.etFormulaName.text.toString())) {
-            viewModel.addItem(item, binding.etFormulaName.text.toString())
+        if (viewModel.itemIsNew(item)){
+            viewModel.addItem(item)
             return
         }
         Toast.makeText(requireContext(), R.string.`already_exist_ّItem`, Toast.LENGTH_SHORT).show()
@@ -81,12 +84,12 @@ class AddFormulaFragment : Fragment() {
     }
 
     private fun hasEmptyField(): Boolean {
-        return (binding.etId.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
+        return (binding.etCode.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
                 binding.etAmount.text.isNullOrEmpty())
     }
 
     private fun checkForErrors() {
-        setError(binding.etId)
+        setError(binding.etCode)
         setError(binding.etMaterial)
         setError(binding.etAmount)
     }
