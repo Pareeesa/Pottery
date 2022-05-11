@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class FormulaRepository(application: Application?) {
 
     private var formulaDao: FormulaDao? = null
+    private var itemDao: ItemDao? = null
     private var formulaList: LiveData<List<Formula>?>? = null
 
     init {
@@ -19,18 +20,11 @@ class FormulaRepository(application: Application?) {
         formulaList = formulaDao!!.getAll()
     }
 
-    fun getAllFormula(): LiveData<List<Formula>?>? {
-        return formulaList
-    }
-
     fun insert(formula: Formula) = formulaDao?.addFormula(formula)
     fun update(formula: Formula) = formulaDao?.update(formula)
 
-    fun findFormula(id:Int):Formula?{
-        return formulaDao?.findFormulaById(id)
-    }
-    fun findFormulaByName(name:String):Formula?{
-        return formulaDao?.findFormulaByName(name)
+    fun findFormulaByName(name:String):LiveData<List<FormulaWithItems>?>?{
+        return formulaDao?.getFormulaWithItems(name)
     }
     fun deleteFormula(formula:Formula) {
         formulaDao?.delete(formula)
@@ -38,5 +32,13 @@ class FormulaRepository(application: Application?) {
     fun searchDb(searchQuery :String): LiveData<List<Formula>?>{
         return formulaDao?.search(searchQuery)!!
     }
+    fun addItem(vararg item: Item) = formulaDao?.addItem(*item)
 
+    fun isItemRepeated(item: Item):Boolean{
+        val result = itemDao?.itemIsRepeated(item.code,item.material)
+        return result == 1
+    }
+    fun isFormulaNew(name: String):Boolean{
+       return (formulaDao?.isFormulaNew(name) == 0)
+    }
 }

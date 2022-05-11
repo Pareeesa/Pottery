@@ -6,6 +6,4 @@ import androidx.room.PrimaryKey
 @Entity
 data class Formula(
     @PrimaryKey(autoGenerate = true) var id:Int,
-    var name : String,
-    var itemList:List<Item>
-)
+    var formulaName : String)
