@@ -1,4 +1,14 @@
 package com.example.pottery.room
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class Item(var id:Int,var material:String,var amount : Int)
+@Entity
+data class Item(
+    @PrimaryKey(autoGenerate = true)
+    var id:Int,
+    var code :String,
+    var formulaName:String,
+    var material:String,
+    var amount : Int
+    )
