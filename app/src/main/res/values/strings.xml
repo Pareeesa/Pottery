@@ -21,5 +21,6 @@
     <string name="delete_dialog_accept"> Accept </string>
     <string name="delete_dialog_message"> This formula will be deleted forever and can no longer be recovered. Are you sure you want to delete the formula? </string>
     <string name="code">Code</string>
+    <string name="formulaname">FormulaName</string>
 
 </resources>
