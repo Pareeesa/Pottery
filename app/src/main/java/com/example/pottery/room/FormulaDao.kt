@@ -20,7 +20,7 @@ interface FormulaDao {
     fun getAll():LiveData<List<Formula>?>?
 
     @Query("SELECT * FROM Formula WHERE formulaName = :formulaName")
-    fun getFormulaWithItems(formulaName : String ):LiveData<List<FormulaWithItems>?>?
+    fun getFormulaWithItems(formulaName : String ):LiveData<FormulaWithItems>?
 
     @Query("SELECT * FROM Formula WHERE formulaName LIKE '%' || :searchedQuery || '%' ORDER BY formulaName DESC")
     fun search(searchedQuery:String):LiveData<List<Formula>?>?

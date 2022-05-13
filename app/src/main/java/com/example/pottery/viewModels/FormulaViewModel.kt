@@ -35,7 +35,7 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
 
     fun update(formula: Formula) = repository.update(formula)
 
-    fun findFormulaByName(name:String):LiveData<List<FormulaWithItems>?>?{
+    fun findFormulaByName(name:String): LiveData<FormulaWithItems>? {
         return repository.findFormulaByName(name)
     }
 

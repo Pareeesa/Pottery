@@ -22,7 +22,7 @@ class FormulaRepository(application: Application?) {
     fun insert(formula: Formula) = formulaDao?.addFormula(formula)
     fun update(formula: Formula) = formulaDao?.update(formula)
 
-    fun findFormulaByName(name:String):LiveData<List<FormulaWithItems>?>?{
+    fun findFormulaByName(name:String): LiveData<FormulaWithItems>? {
         return formulaDao?.getFormulaWithItems(name)
     }
     fun deleteFormula(formula:Formula) {
