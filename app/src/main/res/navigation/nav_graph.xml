@@ -42,8 +42,7 @@
         android:name="com.example.pottery.ui.EditFragment"
         android:label="fragment_edit"
         tools:layout="@layout/fragment_edit" >
-        <argument
-            android:name="formulaId"
-            app:argType="integer" />
+        <argument android:name="formulaName"
+            app:argType="string" />
     </fragment>
 </navigation>
