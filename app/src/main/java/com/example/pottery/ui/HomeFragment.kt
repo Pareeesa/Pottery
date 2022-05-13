@@ -2,12 +2,10 @@ package com.example.pottery.ui
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.sqlite.db.SupportSQLiteCompat.Api16Impl.cancel
 import com.example.pottery.R
 import com.example.pottery.adapters.FormulaAdapter
 import com.example.pottery.databinding.FragmentHomeBinding
@@ -41,7 +39,7 @@ class HomeFragment : Fragment() {
                         deleteFormula(it)
                     },
                     {
-                        val action = HomeFragmentDirections.actionHomeFragmentToEditFragment(it.id)
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditFragment(it.formulaName)
                         findNavController().navigate(action)
                     }
                 )
