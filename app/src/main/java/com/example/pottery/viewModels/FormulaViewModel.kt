@@ -33,7 +33,9 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
         repository.insert(formula)
     }
 
-    fun update(formula: Formula) = repository.update(formula)
+    fun update(formula: Formula) {
+        repository.update(formula)
+    }
 
     fun findFormulaByName(name:String): LiveData<FormulaWithItems>? {
         return repository.findFormulaByName(name)
@@ -45,6 +47,9 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
 
     fun deleteFormula(formula:Formula) {
         repository.deleteFormula(formula)
+    }
+    fun deleteItem(item: Item){
+        repository.deleteItem(item)
     }
     fun isFormulaNew(name: String):Boolean{
         return repository.isFormulaNew(name)

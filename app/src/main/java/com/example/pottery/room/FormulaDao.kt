@@ -36,4 +36,7 @@ interface FormulaDao {
 
     @Query("SELECT Count(id) FROM Item WHERE formulaName = :formulaName AND code = :itemCode")
     fun itemIsRepeated(itemCode: String,formulaName:String):Int
+
+    @Delete
+    fun deleteItem(item: Item)
 }
