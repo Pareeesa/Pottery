@@ -32,7 +32,7 @@ class AddFormulaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ItemAdapter()
+        val adapter = ItemAdapter {}
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             if (it != null){
             binding.recyclerView.adapter = adapter
