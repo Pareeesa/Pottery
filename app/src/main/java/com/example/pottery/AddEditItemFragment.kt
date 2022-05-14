@@ -32,7 +32,7 @@ class AddEditItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var isNew = true
         val item =  args.item
-        if (item.formulaName != ""){
+        if (item.code != ""){
             isNew = false
             binding.apply {
                 etCode.setText(""+item.code)
