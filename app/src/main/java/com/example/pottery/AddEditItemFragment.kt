@@ -30,10 +30,10 @@ class AddEditItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var isNew = true
+        var isNew = false
         val item =  args.item
-        if (item.formulaName != ""){
-            isNew = false
+        if (item.code == ""){
+            isNew = true
             binding.apply {
                 etCode.setText(""+item.code)
                 etMaterial.setText(""+item.material)

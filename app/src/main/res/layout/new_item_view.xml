@@ -38,14 +38,6 @@
             android:text="@{Integer.valueOf(item.amount).toString()}" />
 
         <ImageView
-            android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_baseline_edit_24"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
