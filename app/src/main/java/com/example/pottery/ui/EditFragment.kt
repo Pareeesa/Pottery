@@ -50,7 +50,7 @@ class EditFragment : Fragment() {
 
         binding.btnSave.setOnClickListener {
             if (binding.etNameFormula.text.isNullOrBlank()){
-                Toast.makeText(requireContext(), "Must fill this!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),R.string.must_be_filled, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val updatedFormula = formula?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }
@@ -62,7 +62,7 @@ class EditFragment : Fragment() {
 
         binding.btnAddItem.setOnClickListener {
             if (binding.etNameFormula.text.isNullOrBlank()){
-                binding.etNameFormula.error = "must fill this"
+                binding.etNameFormula.error = R.string.must_be_filled.toString()
                 return@setOnClickListener
             }
             val updatedFormula = formula?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }

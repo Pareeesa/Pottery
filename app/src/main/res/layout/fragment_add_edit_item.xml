@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mid_yellow"
     android:padding="20dp"
-    tools:context=".AddEditItemFragment">
+    tools:context=".ui.AddEditItemFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout5"

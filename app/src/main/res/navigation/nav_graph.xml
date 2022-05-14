@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEditItemFragment"
-        android:name="com.example.pottery.AddEditItemFragment"
+        android:name="com.example.pottery.ui.AddEditItemFragment"
         android:label="fragment_add_edit_item"
         tools:layout="@layout/fragment_add_edit_item" >
         <argument

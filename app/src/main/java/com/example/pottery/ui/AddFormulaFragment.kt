@@ -48,7 +48,7 @@ class AddFormulaFragment : Fragment() {
                 return@setOnClickListener
             }
             addItem()
-            Toast.makeText(requireContext(), "Item added!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.item_added, Toast.LENGTH_SHORT).show()
             binding.apply {
                 etAmount.setText("")
                 etMaterial.setText("")
@@ -84,7 +84,7 @@ class AddFormulaFragment : Fragment() {
 
     private fun setError(editText: EditText) {
         if (editText.text.isNullOrEmpty())
-            editText.error = "Must be filled"
+            editText.error = R.string.must_be_filled.toString()
     }
 
     private fun addItem() {

@@ -1,4 +1,4 @@
-package com.example.pottery
+package com.example.pottery.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.pottery.R
 import com.example.pottery.databinding.FragmentAddEditItemBinding
 import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
@@ -58,7 +59,7 @@ class AddEditItemFragment : Fragment() {
                 )
                 val action = AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
                 findNavController().navigate(action)
-                Toast.makeText(requireContext(), "item added!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.item_added, Toast.LENGTH_SHORT).show()
             }else{
                 viewModel.updateItem(
                     Item(item.id,
@@ -69,7 +70,7 @@ class AddEditItemFragment : Fragment() {
                 )
                 val action = AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
                 findNavController().navigate(action)
-                Toast.makeText(requireContext(), "item changed!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.item_changed, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -87,6 +88,6 @@ class AddEditItemFragment : Fragment() {
 
     private fun setError(editText: EditText) {
         if (editText.text.isNullOrEmpty())
-            editText.error = "Must be filled"
+            editText.error = R.string.must_be_filled.toString()
     }
 }
