@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.pottery.adapters.DetailAdapter
-import com.example.pottery.adapters.ItemAdapter
+import com.example.pottery.adapters.ItemConverterAdapter
 import com.example.pottery.adapters.nameOfFormula
 import com.example.pottery.databinding.FragmentFormulaBinding
 import com.example.pottery.room.Item
@@ -19,10 +19,10 @@ import java.text.DecimalFormat
 class FormulaFragment : Fragment() {
     private lateinit var binding: FragmentFormulaBinding
     private val viewModel: FormulaViewModel by viewModels()
-    val adapterItems = ItemAdapter({},{})
-    var convertValue = 0.0
-    val convertedValueList = mutableListOf<Double>()
-    var itemsList: List<Item>? = listOf()
+    private val adapterItems = ItemConverterAdapter()
+    private var convertValue = 0.0
+    private val convertedValueList = mutableListOf<Double>()
+    private var itemsList: List<Item>? = listOf()
     var total = 0
 
     override fun onCreateView(
