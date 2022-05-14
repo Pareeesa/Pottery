@@ -19,7 +19,7 @@ import java.text.DecimalFormat
 class FormulaFragment : Fragment() {
     private lateinit var binding: FragmentFormulaBinding
     private val viewModel: FormulaViewModel by viewModels()
-    val adapterItems = ItemAdapter()
+    val adapterItems = ItemAdapter({},{})
     var convertValue = 0.0
     val convertedValueList = mutableListOf<Double>()
     var itemsList: List<Item>? = listOf()
@@ -40,7 +40,7 @@ class FormulaFragment : Fragment() {
         binding.recyclerViewItemsDetail.adapter = adapterItems
         viewModel.findFormulaByName(nameOfFormula)?.observe(viewLifecycleOwner)
         {
-            adapterItems.submitList(it?.get(0)?.items)
+            adapterItems.submitList(it?.items)
             itemsList = adapterItems.currentList
             for (item in itemsList!!) {
                 total += item.amount
