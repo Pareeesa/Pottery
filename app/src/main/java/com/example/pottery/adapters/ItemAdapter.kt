@@ -11,8 +11,10 @@ import com.example.pottery.databinding.ItemViewBinding
 import com.example.pottery.room.Item
 
 typealias ItemClickHandler = (Item) -> Unit
+typealias ItemEditClickHandler = (Item) ->Unit
 
-class ItemAdapter(private val clickHandler: ItemClickHandler): ListAdapter<Item, ItemAdapter.ItemHolder>(ItemDiffCallBack) {
+class ItemAdapter(private val clickHandler: ItemClickHandler,private val editClickHandler: ItemEditClickHandler):
+    ListAdapter<Item, ItemAdapter.ItemHolder>(ItemDiffCallBack) {
 
     object ItemDiffCallBack: DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
@@ -37,6 +39,9 @@ class ItemAdapter(private val clickHandler: ItemClickHandler): ListAdapter<Item,
         holder.binding.item = getItem(position)
         holder.binding.btnDelete.setOnClickListener {
             clickHandler.invoke(getItem(position))
+        }
+        holder.binding.btnEdit.setOnClickListener {
+            editClickHandler.invoke(getItem(position))
         }
     }
 }

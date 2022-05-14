@@ -57,6 +57,7 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
             }
         }
     }
+    fun addItem(item: Item) = repository.addItem(item)
 
     fun addItemToList(item: NewItem) {
         if (itemListLiveData.value == null){
@@ -65,6 +66,8 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
             itemListLiveData.value = itemListLiveData.value?.plus(item)
         }
     }
+    fun updateItem(item: Item) = repository.updateItem(item)
+
 }
 data class NewItem(var code :String,var material:String, var amount : Int)
 

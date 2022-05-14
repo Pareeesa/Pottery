@@ -21,6 +21,7 @@ class FormulaRepository(application: Application?) {
 
     fun insert(formula: Formula) = formulaDao?.addFormula(formula)
     fun update(formula: Formula) = formulaDao?.update(formula)
+    fun updateItem(item: Item) = formulaDao?.updateItem(item)
 
     fun findFormulaByName(name:String): LiveData<FormulaWithItems>? {
         return formulaDao?.getFormulaWithItems(name)

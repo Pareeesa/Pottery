@@ -13,6 +13,7 @@ import com.example.pottery.R
 import com.example.pottery.adapters.ItemAdapter
 import com.example.pottery.databinding.FragmentEditBinding
 import com.example.pottery.room.Formula
+import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
 
 class EditFragment : Fragment() {
@@ -28,16 +29,20 @@ class EditFragment : Fragment() {
         binding = FragmentEditBinding.inflate(inflater, container, false)
         return binding.root
     }
-
+ 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val x = viewModel.findFormulaByName(args.formulaName)
-        x?.observe(viewLifecycleOwner){
+        val formula = viewModel.findFormulaByName(args.formulaName)
+        formula?.observe(viewLifecycleOwner){
             if (it != null){
                 binding.etNameFormula.setText(it.formula.formulaName)
-                val adapter = ItemAdapter {item ->
+                val adapter = ItemAdapter(
+                    {item ->
                     viewModel.deleteItem(item)
-                }
+                },{ item ->
+                        val action = EditFragmentDirections.actionEditFragmentToAddEditItemFragment(item)
+                        findNavController().navigate(action)
+                })
                 binding.recyclerView.adapter = adapter
                 adapter.submitList(it.items)
             }
@@ -48,11 +53,25 @@ class EditFragment : Fragment() {
                 Toast.makeText(requireContext(), "Must fill this!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val updatedFormula = x?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }
+            val updatedFormula = formula?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }
             if (updatedFormula != null) {
                 viewModel.update(updatedFormula)
             }
             findNavController().navigate(R.id.action_editFragment_to_homeFragment)
+        }
+
+        binding.btnAddItem.setOnClickListener {
+            if (binding.etNameFormula.text.isNullOrBlank()){
+                binding.etNameFormula.error = "must fill this"
+                return@setOnClickListener
+            }
+            val updatedFormula = formula?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }
+            if (updatedFormula != null) {
+                viewModel.update(updatedFormula)
+            }
+            val action = EditFragmentDirections.actionEditFragmentToAddEditItemFragment(Item(0,"",
+                binding.etNameFormula.text.toString(),"",0))
+            findNavController().navigate(action)
         }
     }
 }

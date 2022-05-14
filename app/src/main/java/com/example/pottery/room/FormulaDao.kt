@@ -39,4 +39,7 @@ interface FormulaDao {
 
     @Delete
     fun deleteItem(item: Item)
+
+    @Update
+    fun updateItem(item: Item)
 }

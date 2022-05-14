@@ -47,5 +47,20 @@
         <action
             android:id="@+id/action_editFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_editFragment_to_addEditItemFragment"
+            app:destination="@id/addEditItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditItemFragment"
+        android:name="com.example.pottery.AddEditItemFragment"
+        android:label="fragment_add_edit_item"
+        tools:layout="@layout/fragment_add_edit_item" >
+        <argument
+            android:name="item"
+            app:argType="com.example.pottery.room.Item" />
+        <action
+            android:id="@+id/action_addEditItemFragment_to_editFragment"
+            app:destination="@id/editFragment" />
     </fragment>
 </navigation>
