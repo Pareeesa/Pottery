@@ -24,4 +24,5 @@
     <string name="enter_value_convert">enter the value to convert</string>
     <string name="convert_button">Convert</string>
     <string name="formula_name2">Formula name:</string>
+    <string name="formulaname">Formula Name</string>
 </resources>
