@@ -5,7 +5,7 @@
     android:id="@+id/constarint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mid_yellow"
+    android:background="@color/purple_500"
     tools:context=".MainActivity">
 
     <TextView
@@ -15,10 +15,10 @@
         android:layout_marginTop="16dp"
         android:fontFamily="cursive"
         android:text="Pottery"
-        android:textColor="@color/dark"
-        android:textSize="35sp"
+        android:textColor="@color/white"
+        android:textSize="55sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintHorizontal_bias="0.27"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
