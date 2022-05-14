@@ -13,6 +13,7 @@ import com.example.pottery.room.Formula
 typealias ClickHandler = (Formula) -> Unit
 typealias ClickHandlerDelete = (Formula) -> Unit
 typealias ClickHandleEdit = (Formula) -> Unit
+var nameOfFormula=""
 class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHandlerD: ClickHandlerDelete,private val clickHandlerE: ClickHandleEdit):
     ListAdapter<Formula, FormulaAdapter.ItemHolder>(FormulaDiffCallBack) {
     object FormulaDiffCallBack: DiffUtil.ItemCallback<Formula>() {
@@ -46,6 +47,7 @@ class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHan
             clickHandlerE.invoke(getItem(position))
         }
         holder.binding.cv.setOnClickListener {
+            nameOfFormula= getItem(position).formulaName
             clickHandler.invoke(getItem(position))
         }
     }
