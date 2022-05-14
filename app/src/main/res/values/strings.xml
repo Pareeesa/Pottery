@@ -16,10 +16,10 @@
     <string name="already_exist_ّFormula">This formula already exists!!</string>
     <string name="already_exist_ّItem">This Item already exists!!</string>
     <string name="successfully_saved"> Saved successfully! </string>
-    <string name="delete_dialog_title"> Are You Sure You Want Delete The Formula? </string>
+    <string name="delete_dialog_title"> Are You Sure? </string>
     <string name="delete_dialog_cancel"> Cancel </string>
     <string name="delete_dialog_accept"> Accept </string>
-    <string name="delete_dialog_message"> This formula will be deleted forever and can no longer be recovered. Are you sure you want to delete the formula? </string>
+    <string name="delete_dialog_message"> This formula will be deleted forever and can no longer be recovered. Are you sure you want to delete this formula? </string>
     <string name="code">Code</string>
     <string name="formulaname">FormulaName</string>
 
