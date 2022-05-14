@@ -45,13 +45,16 @@ class FormulaFragment : Fragment() {
             }
             binding.textViewTotal.text = total.toString()
         }
+        var adapterDetail = DetailAdapter(convertedValueList)
+        binding.recyclerViewConvertValues.adapter = adapterDetail
 
         binding.buttonConvert.setOnClickListener {
+            convertedValueList.clear()
             convertValue = binding.editTextConvertValue.text.toString().toDouble()
             for (item in itemsList!!) {
-                convertedValueList.add(item.amount / total * convertValue)
+                convertedValueList.add((item.amount / total) * convertValue)
             }
-            val adapterDetail = DetailAdapter(convertedValueList)
+            adapterDetail = DetailAdapter(convertedValueList)
             binding.recyclerViewConvertValues.adapter = adapterDetail
             adapterDetail.notifyDataSetChanged()
         }
