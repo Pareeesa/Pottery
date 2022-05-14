@@ -18,8 +18,8 @@ class FormulaFragment : Fragment() {
     private lateinit var binding: FragmentFormulaBinding
     private val viewModel: FormulaViewModel by viewModels()
     val adapterItems = ItemAdapter()
-    var convertValue = 0
-    val convertedValueList = mutableListOf<Int>()
+    var convertValue = 0.0
+    val convertedValueList = mutableListOf<Double>()
     var itemsList: List<Item>? = listOf()
     var total = 0
 
@@ -47,9 +47,9 @@ class FormulaFragment : Fragment() {
         }
 
         binding.buttonConvert.setOnClickListener {
-            convertValue = binding.editTextConvertValue.text.toString().toInt()
+            convertValue = binding.editTextConvertValue.text.toString().toDouble()
             for (item in itemsList!!) {
-                convertedValueList.add(item.amount * total / convertValue)
+                convertedValueList.add(item.amount / total * convertValue)
             }
             val adapterDetail = DetailAdapter(convertedValueList)
             binding.recyclerViewConvertValues.adapter = adapterDetail

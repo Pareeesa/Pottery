@@ -12,7 +12,7 @@ import com.example.pottery.room.Item
 
 
 
-class DetailAdapter(private val mList: List<Int>) : RecyclerView.Adapter<DetailAdapter.ViewHolder>() {
+class DetailAdapter(private val mList: List<Double>) : RecyclerView.Adapter<DetailAdapter.ViewHolder>() {
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
