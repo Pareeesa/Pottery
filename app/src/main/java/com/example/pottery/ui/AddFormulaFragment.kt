@@ -1,9 +1,7 @@
 package com.example.pottery.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -11,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pottery.R
 import com.example.pottery.adapters.ItemAdapter
+import com.example.pottery.adapters.NewItemAdapter
 import com.example.pottery.databinding.FragmentAddFormulaBinding
 import com.example.pottery.room.Formula
 import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
+import com.example.pottery.viewModels.NewItem
 
 class AddFormulaFragment : Fragment() {
 
@@ -31,28 +31,11 @@ class AddFormulaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val adapter = ItemAdapter {}
+        val adapter = NewItemAdapter {}
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             if (it != null){
             binding.recyclerView.adapter = adapter
             adapter.submitList(it)
-            }
-        }
-
-        binding.btnCreate.setOnClickListener {
-            if (binding.etFormulaName.text.isNullOrEmpty()) {
-                setError(binding.etFormulaName)
-                return@setOnClickListener
-            }
-            if (!viewModel.isFormulaNew(binding.etFormulaName.text.toString())) {
-                Toast.makeText(requireContext(), R.string.`already_exist_ّFormula`, Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            } else {
-                viewModel.insertFormula(Formula(0, binding.etFormulaName.text.toString()))
-                binding.addItemCardView.visibility = View.VISIBLE
-                binding.rvLayout.visibility = View.VISIBLE
             }
         }
         binding.btnAddItem.setOnClickListener {
@@ -60,29 +43,30 @@ class AddFormulaFragment : Fragment() {
                 checkForErrors()
                 return@setOnClickListener
             }
-            addItem(binding.etFormulaName.text.toString())
+            if (viewModel.isItemRepeated(NewItem(binding.etCode.text.toString(),binding.etMaterial.text.toString(),
+                    binding.etAmount.text.toString().toInt()))
+            ){
+                Toast.makeText(requireContext(), R.string.`already_exist_ّItem`, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            addItem()
         }
-        binding.btnSave.setOnClickListener {
+        binding.btnCreate.setOnClickListener {
+            if (binding.etFormulaName.text.isNullOrEmpty()) {
+                    setError(binding.etFormulaName)
+                    return@setOnClickListener
+                }
+
+            if (!viewModel.isFormulaNew(binding.etFormulaName.text.toString())) {
+                Toast.makeText(requireContext(), R.string.`already_exist_ّFormula`, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            viewModel.insertFormula(Formula(0,binding.etFormulaName.text.toString()))
+            viewModel.insertItems(binding.etFormulaName.text.toString())
             findNavController().navigate(R.id.action_addFormulaFragment_to_homeFragment)
             Toast.makeText(requireContext(),R.string.successfully_saved, Toast.LENGTH_SHORT).show()
+            }
         }
-    }
-
-    private fun addItem(formulaName :String) {
-        val item = Item(0,
-            binding.etCode.text.toString(),
-            formulaName,
-            binding.etMaterial.text.toString(),
-            binding.etAmount.text.toString().toInt())
-
-        if (!viewModel.isItemRepeated(item)){
-            viewModel.addItem(item)
-            return
-        }
-        Toast.makeText(requireContext(), R.string.`already_exist_ّItem`, Toast.LENGTH_SHORT).show()
-
-    }
-
     private fun hasEmptyField(): Boolean {
         return (binding.etCode.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
                 binding.etAmount.text.isNullOrEmpty())
@@ -98,4 +82,15 @@ class AddFormulaFragment : Fragment() {
         if (editText.text.isNullOrEmpty())
             editText.error = "Must be filled"
     }
+
+    private fun addItem() {
+        val item = NewItem(binding.etCode.text.toString(),
+            binding.etMaterial.text.toString(),
+            binding.etAmount.text.toString().toInt())
+        if (!viewModel.isItemRepeated(item)!!){
+            viewModel.addItemToList(item)
+            return
+        }
+    }
+
 }
