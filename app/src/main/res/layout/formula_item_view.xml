@@ -30,7 +30,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/imageViewEdit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/imageViewEdit"
-                    app:srcCompat="@drawable/ic_baseline_delete_24" />
+                    app:srcCompat="@drawable/ic_baseline_delete_24"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/imageViewEdit"
@@ -40,7 +41,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textViewFormulaName"
                     app:layout_constraintEnd_toStartOf="@+id/imageViewDelete"
                     app:layout_constraintTop_toTopOf="@+id/textViewFormulaName"
-                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+                    app:srcCompat="@drawable/ic_baseline_edit_24"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/textViewFormulaName"
@@ -48,9 +50,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="24dp"
-                    android:text="@{formula.formulaName}"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="@{formula.formulaName}"
                     android:textColor="@color/dark"
                     android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"

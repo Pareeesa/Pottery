@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,10 @@ class EditFragment : Fragment() {
         }
 
         binding.btnSave.setOnClickListener {
+            if (binding.etNameFormula.text.isNullOrBlank()){
+                Toast.makeText(requireContext(), "Must fill this!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val updatedFormula = x?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }
             if (updatedFormula != null) {
                 viewModel.update(updatedFormula)

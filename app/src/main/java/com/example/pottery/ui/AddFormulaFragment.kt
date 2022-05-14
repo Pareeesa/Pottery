@@ -8,11 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pottery.R
-import com.example.pottery.adapters.ItemAdapter
 import com.example.pottery.adapters.NewItemAdapter
 import com.example.pottery.databinding.FragmentAddFormulaBinding
 import com.example.pottery.room.Formula
-import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
 import com.example.pottery.viewModels.NewItem
 
@@ -50,6 +48,12 @@ class AddFormulaFragment : Fragment() {
                 return@setOnClickListener
             }
             addItem()
+            Toast.makeText(requireContext(), "Item added!", Toast.LENGTH_SHORT).show()
+            binding.apply {
+                etAmount.setText("")
+                etMaterial.setText("")
+                etCode.setText("")
+            }
         }
         binding.btnCreate.setOnClickListener {
             if (binding.etFormulaName.text.isNullOrEmpty()) {
@@ -87,7 +91,7 @@ class AddFormulaFragment : Fragment() {
         val item = NewItem(binding.etCode.text.toString(),
             binding.etMaterial.text.toString(),
             binding.etAmount.text.toString().toInt())
-        if (!viewModel.isItemRepeated(item)!!){
+        if (!viewModel.isItemRepeated(item)){
             viewModel.addItemToList(item)
             return
         }
