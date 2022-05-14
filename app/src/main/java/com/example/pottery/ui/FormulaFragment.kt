@@ -13,6 +13,8 @@ import com.example.pottery.adapters.nameOfFormula
 import com.example.pottery.databinding.FragmentFormulaBinding
 import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class FormulaFragment : Fragment() {
     private lateinit var binding: FragmentFormulaBinding
@@ -52,7 +54,11 @@ class FormulaFragment : Fragment() {
             convertedValueList.clear()
             convertValue = binding.editTextConvertValue.text.toString().toDouble()
             for (item in itemsList!!) {
-                convertedValueList.add((item.amount / total) * convertValue)
+                val x = item.amount / total.toDouble() * convertValue
+                val df = DecimalFormat("#.###")
+                df.roundingMode=RoundingMode.DOWN
+               val value =  df.format(x)
+                convertedValueList.add(value.toDouble())
             }
             adapterDetail = DetailAdapter(convertedValueList)
             binding.recyclerViewConvertValues.adapter = adapterDetail
