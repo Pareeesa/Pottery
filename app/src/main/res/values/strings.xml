@@ -5,7 +5,7 @@
     <string name="search">جست و جو</string>
     <string name="_0">0</string>
     <string name="add_item">اضافه کردن آیتم</string>
-    <string name="total">مجموع :</string>
+    <string name="total">مجموع:</string>
     <string name="material">مواد تشکیل دهنده</string>
     <string name="amount">مقدار</string>
     <string name="id">Id</string>
@@ -23,7 +23,7 @@
     <string name="code">کد</string>
     <string name="enter_value_convert">مقدار را برای تبدیل وارد کنید</string>
     <string name="convert_button">تبدیل</string>
-    <string name="formula_name2">نام فرمول :</string>
+    <string name="formula_name2">نام فرمول:</string>
     <string name="must_be_filled">پر کردن این فیلد الزامی است!</string>
     <string name="item_added">آیتم اضافه شد!</string>
     <string name="item_changed">آیتم ویرایش شد!</string>

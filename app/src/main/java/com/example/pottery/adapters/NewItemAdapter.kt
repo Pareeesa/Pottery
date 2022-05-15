@@ -37,8 +37,8 @@ class NewItemAdapter(private val clickHandler: NewItemClickHandler): ListAdapter
     }
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.item = getItem(position)
-        holder.binding.btnDelete.setOnClickListener {
-            clickHandler.invoke(getItem(position))
-        }
+//        holder.binding.btnDelete.setOnClickListener {
+//            clickHandler.invoke(getItem(position))
+//        }
     }
 }
