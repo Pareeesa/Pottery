@@ -29,11 +29,16 @@ class AddFormulaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = NewItemAdapter {}
+
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             if (it != null){
-            binding.recyclerView.adapter = adapter
-            adapter.submitList(it)
+                val adapter = NewItemAdapter { item ->
+                    val updated:MutableList<NewItem> = viewModel.itemListLiveData.value as MutableList<NewItem>
+                    updated.remove(item)
+                    viewModel.itemListLiveData.value = updated
+                }
+                binding.recyclerView.adapter = adapter
+                adapter.submitList(it)
             }
         }
         binding.btnAddItem.setOnClickListener {
