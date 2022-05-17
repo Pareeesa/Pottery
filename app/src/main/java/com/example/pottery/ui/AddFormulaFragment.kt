@@ -33,8 +33,8 @@ class AddFormulaFragment : Fragment() {
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             if (it != null){
                 val adapter = NewItemAdapter { item ->
-                    val updated:MutableList<NewItem> = viewModel.itemListLiveData.value as MutableList<NewItem>
-                    updated.remove(item)
+                    val updated = viewModel.itemListLiveData.value
+                    updated?.remove(item)
                     viewModel.itemListLiveData.value = updated
                 }
                 binding.recyclerView.adapter = adapter

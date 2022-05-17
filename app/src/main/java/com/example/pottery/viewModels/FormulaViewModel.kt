@@ -13,7 +13,7 @@ import com.example.pottery.room.Item
 class FormulaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: FormulaRepository = FormulaRepository(application)
-    val itemListLiveData = MutableLiveData<List<NewItem>>()
+    val itemListLiveData = MutableLiveData<MutableList<NewItem>>()
     val searchQuery = MutableLiveData("")
     private val formulaMap =Transformations.switchMap(searchQuery) {
         repository.searchDb(it)
@@ -61,9 +61,15 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
 
     fun addItemToList(item: NewItem) {
         if (itemListLiveData.value == null){
-            itemListLiveData.value = listOf(item)
+            itemListLiveData.value = mutableListOf(item)
         }else{
-            itemListLiveData.value = itemListLiveData.value?.plus(item)
+            val new = itemListLiveData.value
+            if (new != null) {
+                new.add(item)
+                itemListLiveData.value = new!!
+            }
+
+            //itemListLiveData.value = itemListLiveData.value?.plus(item)
         }
     }
     fun updateItem(item: Item) = repository.updateItem(item)
