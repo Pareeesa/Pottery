@@ -62,7 +62,7 @@ class EditFragment : Fragment() {
 
         binding.btnAddItem.setOnClickListener {
             if (binding.etNameFormula.text.isNullOrBlank()){
-                binding.etNameFormula.error = R.string.must_be_filled.toString()
+                binding.etNameFormula.error = resources.getString(R.string.must_be_filled)
                 return@setOnClickListener
             }
             val updatedFormula = formula?.value?.formula?.let { it1 -> Formula(it1.id,binding.etNameFormula.text.toString()) }

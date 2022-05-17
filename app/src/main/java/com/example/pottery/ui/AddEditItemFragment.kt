@@ -88,6 +88,6 @@ class AddEditItemFragment : Fragment() {
 
     private fun setError(editText: EditText) {
         if (editText.text.isNullOrEmpty())
-            editText.error = R.string.must_be_filled.toString()
+            editText.error = resources.getString(R.string.must_be_filled)
     }
 }

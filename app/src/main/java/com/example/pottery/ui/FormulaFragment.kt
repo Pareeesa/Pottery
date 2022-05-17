@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.example.pottery.R
 import com.example.pottery.adapters.DetailAdapter
 import com.example.pottery.adapters.ItemConverterAdapter
 import com.example.pottery.adapters.nameOfFormula
@@ -51,6 +52,10 @@ class FormulaFragment : Fragment() {
         binding.recyclerViewConvertValues.adapter = adapterDetail
 
         binding.buttonConvert.setOnClickListener {
+            if (binding.editTextConvertValue.text.isNullOrBlank()){
+                binding.editTextConvertValue.error = resources.getString(R.string.must_be_filled)
+                return@setOnClickListener
+            }
             convertedValueList.clear()
             convertValue = binding.editTextConvertValue.text.toString().toDouble()
             for (item in itemsList!!) {
