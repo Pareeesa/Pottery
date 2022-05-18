@@ -83,6 +83,10 @@ class HomeFragment : Fragment() {
             R.id.menu_search -> {
                 return true
             }
+            R.id.menu_about -> {
+                findNavController().navigate(R.id.action_homeFragment_to_aboutFragment)
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
