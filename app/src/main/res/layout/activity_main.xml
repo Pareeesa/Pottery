@@ -44,7 +44,7 @@
         app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/icon_app" />
+        app:srcCompat="@mipmap/new_icon_tree_white" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
