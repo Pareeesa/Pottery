@@ -75,5 +75,5 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
     fun updateItem(item: Item) = repository.updateItem(item)
 
 }
-data class NewItem(var code :String,var material:String, var amount : Int)
+data class NewItem(var code :String,var material:String, var amount : Double)
 

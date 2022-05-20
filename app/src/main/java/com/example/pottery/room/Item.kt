@@ -15,5 +15,5 @@ data class Item(
     var code :String,
     var formulaName:String,
     var material:String,
-    var amount : Int
+    var amount : Double
     ) : Parcelable

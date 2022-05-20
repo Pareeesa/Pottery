@@ -34,10 +34,6 @@ class FormulaRepository(application: Application?) {
     }
     fun addItem(vararg item: Item) = formulaDao?.addItem(*item)
 
-    fun isItemRepeated(item: Item):Boolean{
-        val result = formulaDao?.itemIsRepeated(item.code,item.material)
-        return result != 0
-    }
     fun isFormulaNew(name: String):Boolean{
        return (formulaDao?.isFormulaNew(name) == 0)
     }

@@ -70,7 +70,7 @@ class EditFragment : Fragment() {
                 viewModel.update(updatedFormula)
             }
             val action = EditFragmentDirections.actionEditFragmentToAddEditItemFragment(Item(0,"",
-                binding.etNameFormula.text.toString(),"",0))
+                binding.etNameFormula.text.toString(),"",0.0))
             findNavController().navigate(action)
         }
     }

@@ -1,12 +1,12 @@
 package com.example.pottery.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -55,7 +55,7 @@ class AddEditItemFragment : Fragment() {
                         binding.etCode.text.toString(),
                         item.formulaName,
                         binding.etMaterial.text.toString(),
-                        binding.etAmount.text.toString().toInt())
+                        getAmount())
                 )
                 val action = AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
                 findNavController().navigate(action)
@@ -66,7 +66,7 @@ class AddEditItemFragment : Fragment() {
                         binding.etCode.text.toString(),
                         item.formulaName,
                         binding.etMaterial.text.toString(),
-                        binding.etAmount.text.toString().toInt())
+                        getAmount())
                 )
                 val action = AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
                 findNavController().navigate(action)
@@ -89,5 +89,14 @@ class AddEditItemFragment : Fragment() {
     private fun setError(editText: EditText) {
         if (editText.text.isNullOrEmpty())
             editText.error = resources.getString(R.string.must_be_filled)
+    }
+    private fun isDouble(userInput: String): Boolean {
+        return userInput.contains(".")
+    }
+    private fun getAmount():Double{
+        return if (!isDouble( binding.etAmount.text.toString()))
+            binding.etAmount.text.toString().toInt().toDouble()
+        else
+            binding.etAmount.text.toString().toDouble()
     }
 }

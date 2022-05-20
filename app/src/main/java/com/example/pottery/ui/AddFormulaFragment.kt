@@ -47,7 +47,7 @@ class AddFormulaFragment : Fragment() {
                 return@setOnClickListener
             }
             if (viewModel.isItemRepeated(NewItem(binding.etCode.text.toString(),binding.etMaterial.text.toString(),
-                    binding.etAmount.text.toString().toInt()))
+                    getAmount()))
             ){
                 Toast.makeText(requireContext(), R.string.`already_exist_ّItem`, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -95,11 +95,20 @@ class AddFormulaFragment : Fragment() {
     private fun addItem() {
         val item = NewItem(binding.etCode.text.toString(),
             binding.etMaterial.text.toString(),
-            binding.etAmount.text.toString().toInt())
+            getAmount())
         if (!viewModel.isItemRepeated(item)){
             viewModel.addItemToList(item)
             return
         }
+    }
+    private fun isDouble(userInput: String): Boolean {
+        return userInput.contains(".")
+    }
+    private fun getAmount():Double{
+        return if (!isDouble( binding.etAmount.text.toString()))
+            binding.etAmount.text.toString().toInt().toDouble()
+        else
+            binding.etAmount.text.toString().toDouble()
     }
 
 }

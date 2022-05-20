@@ -24,7 +24,7 @@ class FormulaFragment : Fragment() {
     private var convertValue = 0.0
     private val convertedValueList = mutableListOf<Double>()
     private var itemsList: List<Item>? = listOf()
-    var total = 0
+    var total = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
