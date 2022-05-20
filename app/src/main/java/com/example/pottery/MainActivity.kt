@@ -14,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         supportActionBar?.hide()
-        binding.group.alpha=0f
-        binding.group.animate().setDuration(1500).alpha(1f).withEndAction{
-            binding.group.visibility= View.GONE
+        binding.imageView.alpha=0f
+        binding.imageView.animate().setDuration(1500).alpha(1f).withEndAction{
+            binding.imageView.visibility= View.GONE
             supportActionBar?.show()
             binding.constarintLayout.setBackgroundColor(Color.TRANSPARENT)
             binding.navHostFragment.visibility= View.VISIBLE
