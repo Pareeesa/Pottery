@@ -27,4 +27,5 @@
     <string name="must_be_filled">پر کردن این فیلد الزامی است!</string>
     <string name="item_added">آیتم اضافه شد!</string>
     <string name="item_changed">آیتم ویرایش شد!</string>
+    <string name="about"> درباره ما</string>
 </resources>
