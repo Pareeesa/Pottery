@@ -28,5 +28,5 @@
     <string name="item_added">آیتم اضافه شد!</string>
     <string name="item_changed">آیتم ویرایش شد!</string>
     <string name="about"> درباره ما</string>
-    <string name="tooskawood_ir">tooskawood.ir</string>
+    <string name="tooskawood_ir"><u>tooskawood.ir</u></string>
 </resources>

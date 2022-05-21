@@ -19,15 +19,29 @@
         tools:ignore="ContentDescription" />
 
     <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:fontFamily="@font/koodak"
+        android:text="وبسایت توسکا وود:"
+        android:textColor="@color/Orange"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewIconAbout" />
+
+    <TextView
         android:id="@+id/textViewURL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/font2"
         android:text="@string/tooskawood_ir"
-        android:textColor="@color/Orange"
-        android:textSize="50sp"
+        android:textColor="#FFC107"
+        android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="@+id/imageViewIconAbout"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toStartOf="@+id/imageViewIconAbout"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewIconAbout" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
