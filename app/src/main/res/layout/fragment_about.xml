@@ -38,7 +38,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/font2"
         android:text="@string/tooskawood_ir"
-        android:textColor="#FFC107"
+        android:textColor="#009688"
         android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="@+id/imageViewIconAbout"
         app:layout_constraintHorizontal_bias="0.627"

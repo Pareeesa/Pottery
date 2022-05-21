@@ -29,6 +29,8 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/purple_700"
         android:text="@string/convert_button"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/editText_Convert_Value"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText_Convert_Value" />
