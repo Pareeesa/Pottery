@@ -31,6 +31,7 @@ class AddEditItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.title = "Tooska Wood"
         var isNew = true
         val item =  args.item
         if (item.code != ""){
