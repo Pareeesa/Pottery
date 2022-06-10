@@ -27,14 +27,16 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
         return repository.findFormulaByName(name)
     }
 
-    fun isItemRepeated(item: NewItem): Boolean {
+    fun isNewItemRepeated(item: NewItem): Boolean {
         if (itemListLiveData.value?.size == null || itemListLiveData.value?.size==0)
             return false
         else if (itemListLiveData.value?.contains(item)!!)
             return true
         return false
     }
-
+    fun itemIsRepeated(itemCode: String,formulaName:String):Boolean{
+        return repository.itemIsRepeated(itemCode,formulaName)
+    }
     fun deleteFormula(formula:Formula) {
         repository.deleteFormula(formula)
         repository.deleteItems(formula.formulaName)

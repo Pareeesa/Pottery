@@ -33,49 +33,74 @@ class AddEditItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.title = "Tooska Wood"
         var isNew = true
-        val item =  args.item
-        if (item.code != ""){
+        val item = args.item
+        if (item.code != "") {
             isNew = false
             binding.apply {
-                etCode.setText(""+item.code)
-                etMaterial.setText(""+item.material)
-                etAmount.setText((""+item.amount))
+                etCode.setText("" + item.code)
+                etMaterial.setText("" + item.material)
+                etAmount.setText(("" + item.amount))
             }
         }
         binding.btnSaveItem.setOnClickListener {
-            if (hasEmptyField()){
+            if (hasEmptyField()) {
                 if (hasEmptyField()) {
                     checkForErrors()
                     return@setOnClickListener
                 }
             }
             if (isNew) {
-                viewModel.addItem(
-                    Item(
-                        0,
-                        binding.etCode.text.toString(),
-                        item.formulaName,
-                        binding.etMaterial.text.toString(),
-                        getAmount())
-                )
-                val action = AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
-                findNavController().navigate(action)
-                Toast.makeText(requireContext(), R.string.item_added, Toast.LENGTH_SHORT).show()
-            }else{
-                viewModel.updateItem(
-                    Item(item.id,
-                        binding.etCode.text.toString(),
-                        item.formulaName,
-                        binding.etMaterial.text.toString(),
-                        getAmount())
-                )
-                val action = AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
-                findNavController().navigate(action)
-                Toast.makeText(requireContext(), R.string.item_changed, Toast.LENGTH_SHORT).show()
+                if (viewModel.itemIsRepeated(binding.etCode.text.toString(), item.formulaName)) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.`already_exist_ّItem`,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                } else {
+                    viewModel.addItem(
+                        Item(
+                            0,
+                            binding.etCode.text.toString(),
+                            item.formulaName,
+                            binding.etMaterial.text.toString(),
+                            getAmount()
+                        )
+                    )
+                    val action =
+                        AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
+                    findNavController().navigate(action)
+                    Toast.makeText(requireContext(), R.string.item_added, Toast.LENGTH_SHORT).show()
+                }
+            }else {
+                if (viewModel.itemIsRepeated(item.code, item.formulaName)) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.`already_exist_ّItem`,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                } else {
+                    viewModel.updateItem(
+                        Item(
+                            item.id,
+                            binding.etCode.text.toString(),
+                            item.formulaName,
+                            binding.etMaterial.text.toString(),
+                            getAmount()
+                        )
+                    )
+                    val action =
+                        AddEditItemFragmentDirections.actionAddEditItemFragmentToEditFragment(item.formulaName)
+                    findNavController().navigate(action)
+                    Toast.makeText(requireContext(), R.string.item_changed, Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
         }
     }
+
     private fun hasEmptyField(): Boolean {
         return (binding.etCode.text.isNullOrEmpty() || binding.etMaterial.text.isNullOrEmpty() ||
                 binding.etAmount.text.isNullOrEmpty())
@@ -91,11 +116,13 @@ class AddEditItemFragment : Fragment() {
         if (editText.text.isNullOrEmpty())
             editText.error = resources.getString(R.string.must_be_filled)
     }
+
     private fun isDouble(userInput: String): Boolean {
         return userInput.contains(".")
     }
-    private fun getAmount():Double{
-        return if (!isDouble( binding.etAmount.text.toString()))
+
+    private fun getAmount(): Double {
+        return if (!isDouble(binding.etAmount.text.toString()))
             binding.etAmount.text.toString().toInt().toDouble()
         else
             binding.etAmount.text.toString().toDouble()

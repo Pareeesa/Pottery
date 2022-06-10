@@ -41,4 +41,9 @@ class FormulaRepository(application: Application?) {
     }
     fun deleteItems(formulaName :String) = formulaDao?.deleteItems(formulaName)
 
+    fun itemIsRepeated(itemCode: String,formulaName:String):Boolean{
+        return formulaDao?.itemIsRepeated(itemCode,formulaName) == 1
+    }
+
+
 }
