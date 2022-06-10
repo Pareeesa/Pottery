@@ -22,6 +22,6 @@ class MainActivity : AppCompatActivity() {
             binding.navHostFragment.visibility= View.VISIBLE
             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out)
         }
-        this.title = "Tooska Wood"
+        this.title = "Tooskawood.ir"
     }
 }
