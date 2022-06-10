@@ -2,7 +2,6 @@ package com.example.pottery.room
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.flow.Flow
 
 class FormulaRepository(application: Application?) {
 
@@ -37,8 +36,8 @@ class FormulaRepository(application: Application?) {
     fun isFormulaNew(name: String):Boolean{
        return (formulaDao?.isFormulaNew(name) == 0)
     }
-
     fun deleteItem(item: Item) {
         formulaDao?.deleteItem(item)
     }
+
 }

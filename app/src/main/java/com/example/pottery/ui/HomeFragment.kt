@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.title = "Tooska Wood"
+        activity?.title = "Tooskawood.ir"
         viewModel.formulaList.observe(viewLifecycleOwner) { it ->
             if (it != null) {
                 val adapter = FormulaAdapter({
