@@ -39,5 +39,6 @@ class FormulaRepository(application: Application?) {
     fun deleteItem(item: Item) {
         formulaDao?.deleteItem(item)
     }
+    fun deleteItems(formulaName :String) = formulaDao?.deleteItems(formulaName)
 
 }

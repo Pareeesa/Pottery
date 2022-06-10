@@ -42,4 +42,7 @@ interface FormulaDao {
 
     @Update
     fun updateItem(item: Item)
+
+    @Query("DELETE FROM Item WHERE formulaName = :formulaName")
+    fun deleteItems(formulaName: String)
 }

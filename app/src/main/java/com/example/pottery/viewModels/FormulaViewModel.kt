@@ -37,6 +37,7 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
 
     fun deleteFormula(formula:Formula) {
         repository.deleteFormula(formula)
+        repository.deleteItems(formula.formulaName)
     }
     fun isFormulaNew(name: String):Boolean{
         return repository.isFormulaNew(name)
