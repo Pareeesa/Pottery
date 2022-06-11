@@ -52,10 +52,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="8dp"
-                android:hint="@string/code">
+                android:hint="@string/material">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_code"
+                    android:id="@+id/et_material"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -66,10 +66,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="8dp"
-                android:hint="@string/material">
+                android:hint="@string/code">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_material"
+                    android:id="@+id/et_code"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>
