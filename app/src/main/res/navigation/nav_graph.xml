@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/navigateFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -80,5 +80,32 @@
         <action
             android:id="@+id/action_aboutFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigateFragment"
+        android:name="com.example.pottery.ui.NavigateFragment"
+        android:label="fragment_navigate"
+        tools:layout="@layout/fragment_navigate" >
+        <action
+            android:id="@+id/action_navigateFragment_to_formulaFragment"
+            app:destination="@id/formulaFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_addEditItemFragment"
+            app:destination="@id/addEditItemFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_editFragment"
+            app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_formulaFragment2"
+            app:destination="@id/formulaFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_addFormulaFragment"
+            app:destination="@id/addFormulaFragment" />
     </fragment>
 </navigation>

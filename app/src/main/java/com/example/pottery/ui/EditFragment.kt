@@ -14,7 +14,7 @@ import com.example.pottery.adapters.ItemAdapter
 import com.example.pottery.databinding.FragmentEditBinding
 import com.example.pottery.room.Formula
 import com.example.pottery.room.Item
-import com.example.pottery.viewModels.FormulaViewModel
+import com.example.pottery.viewModels.EditViewModel
 
 class EditFragment : Fragment() {
 
