@@ -1,10 +1,13 @@
 package com.example.pottery.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.webkit.WebSettings
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -36,6 +39,18 @@ class WebViewFragment : Fragment() {
         binding.webView.webViewClient = WebViewClient()
         binding.webView.apply {
             this.loadUrl(formulaViewModel.webViewURL)
+        }
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(wv: WebView, url: String): Boolean {
+                if (url.contains("whatsapp.com")) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(url)
+                    startActivity(intent)
+                    binding.webView.goBack()
+                    return true
+                }
+                return false
+            }
         }
         binding.webView.settings.javaScriptEnabled = true
         val webSettings: WebSettings = binding.webView.settings
