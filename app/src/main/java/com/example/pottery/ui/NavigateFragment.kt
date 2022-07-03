@@ -30,12 +30,11 @@ class NavigateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.cardVieww.visibility= View.GONE
-        binding.cardViewInsert.setOnClickListener {
+        binding.imageViewInsert.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_addFormulaFragment)
         }
 
-        binding.cardViewSearch.setOnClickListener {
+        binding.imageViewSearch.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_homeFragment)
         }
     }
