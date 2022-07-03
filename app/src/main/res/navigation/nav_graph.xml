@@ -107,5 +107,12 @@
         <action
             android:id="@+id/action_navigateFragment_to_addFormulaFragment"
             app:destination="@id/addFormulaFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.pottery.ui.WebViewFragment"
+        android:label="WebViewFragment" />
 </navigation>
