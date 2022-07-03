@@ -30,13 +30,13 @@ class WebViewFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetJavaScriptEnabled")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.webView.webViewClient = WebViewClient()
         binding.webView.apply {
-            loadUrl(formulaViewModel.webViewURL)
+            this.loadUrl(formulaViewModel.webViewURL)
             settings.javaScriptEnabled = true
         }
     }
