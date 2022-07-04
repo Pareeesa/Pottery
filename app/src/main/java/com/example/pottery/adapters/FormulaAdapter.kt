@@ -1,15 +1,22 @@
 package com.example.pottery.adapters
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.pottery.R
 import com.example.pottery.databinding.FormulaItemViewBinding
 import com.example.pottery.room.Formula
+import java.io.File
+
+
 typealias ClickHandler = (Formula) -> Unit
 typealias ClickHandlerDelete = (Formula) -> Unit
 typealias ClickHandleEdit = (Formula) -> Unit
@@ -49,6 +56,13 @@ class FormulaAdapter(private val clickHandler: ClickHandler,private val clickHan
         holder.binding.cv.setOnClickListener {
             nameOfFormula= getItem(position).formulaName
             clickHandler.invoke(getItem(position))
+        }
+        val imgFile = File(getItem(position).imagePath)
+        if (imgFile.exists()) {
+            val requestOptions = RequestOptions()
+            Glide.with(holder.binding.imageView.context).load(BitmapFactory.decodeFile(imgFile.absolutePath))
+                .apply(requestOptions.transforms(CenterCrop(), RoundedCorners(16)))
+                .into(holder.binding.imageView)
         }
     }
 }

@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun deleteFormula(formula: Formula) {
+    private fun deleteFormula(formula: Formula) {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle(resources.getString(R.string.delete_dialog_title))
