@@ -24,7 +24,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            tools:src="@tools:sample/avatars" />
+            app:srcCompat="@drawable/calcnew" />
 
         <ImageView
             android:id="@+id/imageView_about_me"
@@ -93,7 +93,8 @@
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            tools:src="@tools:sample/avatars" />
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/workshop" />
 
         <ImageView
             android:id="@+id/imageView_products"
@@ -101,7 +102,8 @@
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            tools:src="@tools:sample/avatars" />
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/products" />
 
         <ImageView
             android:id="@+id/imageView_training_classes"
@@ -109,7 +111,8 @@
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            tools:src="@tools:sample/avatars" />
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/learning" />
 
     </LinearLayout>
 
@@ -138,9 +141,10 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/search"
                 tools:layout_editor_absoluteX="-63dp"
-                tools:layout_editor_absoluteY="645dp"
-                tools:src="@tools:sample/avatars" />
+                tools:layout_editor_absoluteY="645dp" />
 
             <ImageView
                 android:id="@+id/imageView_insert"

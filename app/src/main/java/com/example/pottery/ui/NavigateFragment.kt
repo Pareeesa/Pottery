@@ -38,6 +38,14 @@ class NavigateFragment : Fragment() {
         binding.imageViewSearch.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_homeFragment)
         }
+        binding.imageViewProducts.setOnClickListener {
+            formulaViewModel.webViewURL = "https://www.tooskawood.ir/slab-built/"
+            findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
+        }
+        binding.imageViewTrainingClasses.setOnClickListener {
+            formulaViewModel.webViewURL = "https://www.tooskawood.ir/pottery-academic/"
+            findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
+        }
         binding.imageViewCalculator.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_calculatorFragment)
         }
