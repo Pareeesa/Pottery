@@ -73,7 +73,7 @@ class AddEditItemFragment : Fragment() {
                     Toast.makeText(requireContext(), R.string.item_added, Toast.LENGTH_SHORT).show()
                 }
             }else {
-                if (viewModel.itemIsRepeated(item.code, item.formulaName)) {
+                if (viewModel.itemIsRepeated(binding.etCode.text.toString(), item.formulaName)) {
                     Toast.makeText(
                         requireContext(),
                         R.string.`already_exist_ّItem`,

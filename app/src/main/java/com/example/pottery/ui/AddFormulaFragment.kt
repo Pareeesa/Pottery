@@ -40,7 +40,7 @@ class AddFormulaFragment : Fragment() {
 
     private lateinit var binding: FragmentAddFormulaBinding
     private val viewModel: FormulaViewModel by viewModels()
-    private lateinit var currentPhotoPath: String
+    private var currentPhotoPath = "0"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
