@@ -22,6 +22,10 @@
         <action
             android:id="@+id/action_homeFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_navigateFragment"
+            app:destination="@id/navigateFragment"
+            app:popUpTo="@id/navigateFragment" />
     </fragment>
     <fragment
         android:id="@+id/formulaFragment"
@@ -39,8 +43,8 @@
         <action
             android:id="@+id/action_addFormulaFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/navigateFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/editFragment"
@@ -106,6 +110,21 @@
             app:destination="@id/formulaFragment" />
         <action
             android:id="@+id/action_navigateFragment_to_addFormulaFragment"
-            app:destination="@id/addFormulaFragment" />
+            app:destination="@id/addFormulaFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_navigateFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_calculatorFragment"
+            app:destination="@id/calculatorFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.pottery.ui.WebViewFragment"
+        android:label="WebViewFragment" />
+    <fragment
+        android:id="@+id/calculatorFragment"
+        android:name="com.example.pottery.ui.CalculatorFragment"
+        android:label="CalculatorFragment" />
 </navigation>
