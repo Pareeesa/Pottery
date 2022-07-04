@@ -38,6 +38,9 @@ class NavigateFragment : Fragment() {
         binding.imageViewSearch.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_homeFragment)
         }
+        binding.imageViewCalculator.setOnClickListener {
+            findNavController().navigate(R.id.action_navigateFragment_to_calculatorFragment)
+        }
         binding.imageViewAboutMe.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_aboutFragment)
         }

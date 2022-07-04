@@ -115,9 +115,16 @@
         <action
             android:id="@+id/action_navigateFragment_to_webViewFragment"
             app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_navigateFragment_to_calculatorFragment"
+            app:destination="@id/calculatorFragment" />
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
         android:name="com.example.pottery.ui.WebViewFragment"
         android:label="WebViewFragment" />
+    <fragment
+        android:id="@+id/calculatorFragment"
+        android:name="com.example.pottery.ui.CalculatorFragment"
+        android:label="CalculatorFragment" />
 </navigation>
