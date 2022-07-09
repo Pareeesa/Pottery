@@ -39,11 +39,15 @@ class NavigateFragment : Fragment() {
             findNavController().navigate(R.id.action_navigateFragment_to_homeFragment)
         }
         binding.imageViewProducts.setOnClickListener {
-            formulaViewModel.webViewURL = "https://www.tooskawood.ir/slab-built/"
+            formulaViewModel.webViewURL = "https://www.tooskawood.ir/shop/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
         }
         binding.imageViewTrainingClasses.setOnClickListener {
             formulaViewModel.webViewURL = "https://www.tooskawood.ir/pottery-academic/"
+            findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
+        }
+        binding.imageViewWorkShop.setOnClickListener {
+            formulaViewModel.webViewURL = "https://www.tooskawood.ir/workshop/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
         }
         binding.imageViewCalculator.setOnClickListener {
