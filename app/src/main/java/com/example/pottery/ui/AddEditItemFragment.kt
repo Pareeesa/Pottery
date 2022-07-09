@@ -73,14 +73,6 @@ class AddEditItemFragment : Fragment() {
                     Toast.makeText(requireContext(), R.string.item_added, Toast.LENGTH_SHORT).show()
                 }
             }else {
-                if (viewModel.itemIsRepeated(binding.etCode.text.toString(), item.formulaName)) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.`already_exist_ّItem`,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                } else {
                     viewModel.updateItem(
                         Item(
                             item.id,
@@ -95,9 +87,7 @@ class AddEditItemFragment : Fragment() {
                     findNavController().navigate(action)
                     Toast.makeText(requireContext(), R.string.item_changed, Toast.LENGTH_SHORT)
                         .show()
-                }
             }
-
         }
     }
 
