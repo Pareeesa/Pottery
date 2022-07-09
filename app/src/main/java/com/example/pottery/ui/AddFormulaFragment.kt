@@ -66,6 +66,7 @@ class AddFormulaFragment : Fragment() {
             }
         }
         binding.ivPicture.setOnClickListener {
+            if (checkAndRequestPermissions())
                 chooseImage.launch()
         }
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
@@ -158,6 +159,66 @@ class AddFormulaFragment : Fragment() {
         }catch (e:IOException){
             e.printStackTrace()
             false
+        }
+    }
+    private fun checkAndRequestPermissions(): Boolean {
+        val wExtstorePermission = ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val cameraPermission = ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.CAMERA)
+        val listPermissionsNeeded: MutableList<String> = ArrayList()
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CAMERA)
+        }
+        if (wExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (listPermissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(requireActivity(), listPermissionsNeeded.toTypedArray(),
+                REQUEST_ID_MULTIPLE_PERMISSIONS)
+            return false
+        }
+        return true
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray) {
+        when (requestCode) {
+            REQUEST_ID_MULTIPLE_PERMISSIONS -> when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED -> {
+                    Toast.makeText(
+                        ApplicationProvider.getApplicationContext(),
+                        "FlagUp Requires Access to Camara.", Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED -> {
+                    Toast.makeText(
+                        ApplicationProvider.getApplicationContext(),
+                        "FlagUp Requires Access to Your Storage.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+                        if (it != null) {
+                            val name = UUID.randomUUID().toString()
+                            savePhotoToInternalStorage(name, it)
+                            currentPhotoPath = name
+                            binding.ivPicture.setImageBitmap(it)
+                        }
+                    }
+                    chooseImage.launch()
+                }
+            }
         }
     }
 }
