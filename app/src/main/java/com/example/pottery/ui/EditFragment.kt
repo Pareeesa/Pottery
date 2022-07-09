@@ -46,10 +46,10 @@ class EditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val formula = viewModel.findFormulaByName(args.formulaName)
         activity?.title = args.formulaName
-        formula?.observe(viewLifecycleOwner){ formula ->
-            if (formula != null){
-                binding.etFormulaName.setText(formula.formula.formulaName)
-                currentPhotoPath = formula.formula.imagePath
+        formula?.observe(viewLifecycleOwner){ formula1 ->
+            if (formula1 != null){
+                binding.etFormulaName.setText(formula1.formula.formulaName)
+                currentPhotoPath = formula1.formula.imagePath
                 val files = requireContext().filesDir.listFiles()
                 files?.filter { it.canRead() && it.isFile  && it.name=="${currentPhotoPath}.jpg"  }
                     ?.map {
@@ -65,7 +65,7 @@ class EditFragment : Fragment() {
                         findNavController().navigate(action)
                 })
                 binding.recyclerView.adapter = adapter
-                adapter.submitList(formula.items)
+                adapter.submitList(formula1.items)
             }
         }
         val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
