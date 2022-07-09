@@ -40,6 +40,10 @@ class WebViewFragment : Fragment() {
         binding.webView.apply {
             this.loadUrl(formulaViewModel.webViewURL)
         }
+        binding.animationView.animate().setDuration(2500).alpha(1f).withEndAction {
+            binding.animationView.visibility = View.GONE
+            binding.webView.visibility = View.VISIBLE
+        }
         binding.webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(wv: WebView, url: String): Boolean {
                 if (url.contains("whatsapp.com")) {
