@@ -26,6 +26,8 @@ import com.example.pottery.room.Formula
 import com.example.pottery.room.Item
 import com.example.pottery.viewModels.EditViewModel
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditFragment : Fragment() {
 
@@ -109,9 +111,18 @@ class EditFragment : Fragment() {
     }
     private fun savePhotoToInternalStorage(bmp:Bitmap):Boolean{
         return try {
+            if (currentPhotoPath != "0"){
             context?.openFileOutput("$currentPhotoPath.jpg", Activity.MODE_PRIVATE).use { stream->
                 if (!bmp.compress(Bitmap.CompressFormat.JPEG,95,stream))
                     throw IOException("COULDN'T SAVE BITMAP")
+            }
+            }else{
+                val name = UUID.randomUUID().toString()
+                currentPhotoPath = name
+                context?.openFileOutput("$name.jpg", Activity.MODE_PRIVATE).use { stream ->
+                    if (!bmp.compress(Bitmap.CompressFormat.JPEG, 95, stream))
+                        throw IOException("COULDN'T SAVE BITMAP")
+                }
             }
             true
         }catch (e: IOException){
