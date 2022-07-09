@@ -2,18 +2,16 @@ package com.example.pottery.ui
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,17 +19,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.test.core.app.ApplicationProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.pottery.R
 import com.example.pottery.adapters.ItemAdapter
 import com.example.pottery.databinding.FragmentEditBinding
 import com.example.pottery.room.Formula
 import com.example.pottery.room.Item
 import com.example.pottery.viewModels.EditViewModel
-import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 class EditFragment : Fragment() {
 
@@ -52,14 +46,17 @@ class EditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val formula = viewModel.findFormulaByName(args.formulaName)
         activity?.title = args.formulaName
-        formula?.observe(viewLifecycleOwner){
-            if (it != null){
-                binding.etFormulaName.setText(it.formula.formulaName)
-                currentPhotoPath = it.formula.imagePath
-                val requestOptions = RequestOptions()
-                Glide.with(binding.ivPicture.context).load(BitmapFactory.decodeFile(it.formula.imagePath))
-                    .apply(requestOptions.transforms(CenterCrop(), RoundedCorners(16)))
-                    .into(binding.ivPicture)
+        formula?.observe(viewLifecycleOwner){ formula ->
+            if (formula != null){
+                binding.etFormulaName.setText(formula.formula.formulaName)
+                currentPhotoPath = formula.formula.imagePath
+                val files = requireContext().filesDir.listFiles()
+                files?.filter { it.canRead() && it.isFile  && it.name=="${currentPhotoPath}.jpg"  }
+                    ?.map {
+                        val bytes = it.readBytes()
+                        val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        binding.ivPicture.setImageBitmap(bmp)
+                    }
                 adapter = ItemAdapter(
                     {item ->
                     viewModel.deleteItem(item)
@@ -68,12 +65,18 @@ class EditFragment : Fragment() {
                         findNavController().navigate(action)
                 })
                 binding.recyclerView.adapter = adapter
-                adapter.submitList(it.items)
+                adapter.submitList(formula.items)
+            }
+        }
+        val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            if (it != null) {
+                savePhotoToInternalStorage(it)
+                binding.ivPicture.setImageBitmap(it)
             }
         }
         binding.btnEditImage.setOnClickListener {
             if(checkAndRequestPermissions())
-                chooseImage()
+                chooseImage.launch()
         }
         binding.btnSave.setOnClickListener {
             if (binding.etFormulaName.text.isNullOrBlank()){
@@ -102,6 +105,18 @@ class EditFragment : Fragment() {
             val action = EditFragmentDirections.actionEditFragmentToAddEditItemFragment(Item(0,"",
                 binding.etFormulaName.text.toString(),"",0.0))
             findNavController().navigate(action)
+        }
+    }
+    private fun savePhotoToInternalStorage(bmp:Bitmap):Boolean{
+        return try {
+            context?.openFileOutput("$currentPhotoPath.jpg", Activity.MODE_PRIVATE).use { stream->
+                if (!bmp.compress(Bitmap.CompressFormat.JPEG,95,stream))
+                    throw IOException("COULDN'T SAVE BITMAP")
+            }
+            true
+        }catch (e: IOException){
+            e.printStackTrace()
+            false
         }
     }
     private fun checkAndRequestPermissions(): Boolean {
@@ -151,79 +166,16 @@ class EditFragment : Fragment() {
                     ).show()
                 }
                 else -> {
-                    chooseImage()
+                    val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+                        if (it != null) {
+                            savePhotoToInternalStorage(it)
+                            binding.ivPicture.setImageBitmap(it)
+                        }
+                    }
+                    chooseImage.launch()
                 }
             }
         }
-    }
-    private fun chooseImage() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setCancelable(true)
-            .setNegativeButton("دوربین") { _, _ ->
-                val photo = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(photo, 0)
-            }
-            .setPositiveButton("گالری") { _, _ ->
-                val pickPhoto =
-                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(pickPhoto, 1)
-            }
-            .setNeutralButton("انصراف") { dialog, _ ->
-                dialog.dismiss()
-            }
-        val alert = builder.create()
-        alert.show()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_CANCELED) {
-            when (requestCode) {
-                0 -> if (resultCode == Activity.RESULT_OK && data != null) {
-                    val selectedImage = data.extras!!["data"] as Bitmap?
-                    val bytes = ByteArrayOutputStream()
-                    selectedImage?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-                    val path: String = MediaStore.Images.Media.insertImage(
-                        requireContext().contentResolver,
-                        selectedImage,
-                        "Title",
-                        null
-                    )
-                    val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-                    if (selectedImage != null) {
-                        val cursor = requireContext().contentResolver.query(Uri.parse(path), filePathColumn, null, null, null)
-                        if (cursor != null) {
-                            cursor.moveToFirst()
-                            val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
-                            val picturePath: String = cursor.getString(columnIndex)
-                            currentPhotoPath = picturePath
-                            val requestOptions = RequestOptions()
-                            Glide.with(binding.ivPicture.context).load(BitmapFactory.decodeFile(picturePath))
-                                .apply(requestOptions.transforms(CenterCrop(), RoundedCorners(16)))
-                                .into(binding.ivPicture)
-                            cursor.close()
-                        }
-                    }
-                }
-                1 -> if (resultCode == Activity.RESULT_OK && data != null) {
-                    val selectedImage: Uri? = data.data
-                    val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-                    if (selectedImage != null) {
-                        val cursor = requireContext().contentResolver.query(selectedImage, filePathColumn, null, null, null)
-                        if (cursor != null) {
-                            cursor.moveToFirst()
-                            val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
-                            val picturePath: String = cursor.getString(columnIndex)
-                            currentPhotoPath = picturePath
-                            val requestOptions = RequestOptions()
-                            Glide.with(binding.ivPicture.context).load(BitmapFactory.decodeFile(picturePath))
-                                .apply(requestOptions.transforms(CenterCrop(), RoundedCorners(16)))
-                                .into(binding.ivPicture)
-                            cursor.close()
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
