@@ -111,12 +111,12 @@ class EditFragment : Fragment() {
     }
     private fun savePhotoToInternalStorage(bmp:Bitmap):Boolean{
         return try {
-            if (currentPhotoPath != "0"){
+            if (currentPhotoPath != "0" && !currentPhotoPath.startsWith("/storage")){
             context?.openFileOutput("$currentPhotoPath.jpg", Activity.MODE_PRIVATE).use { stream->
                 if (!bmp.compress(Bitmap.CompressFormat.JPEG,95,stream))
                     throw IOException("COULDN'T SAVE BITMAP")
             }
-            }else{
+            } else{
                 val name = UUID.randomUUID().toString()
                 currentPhotoPath = name
                 context?.openFileOutput("$name.jpg", Activity.MODE_PRIVATE).use { stream ->
