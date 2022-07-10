@@ -42,6 +42,10 @@ class NavigateFragment : Fragment() {
             formulaViewModel.webViewURL = "https://www.tooskawood.ir/shop/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
         }
+        binding.imageViewGuide.setOnClickListener {
+            formulaViewModel.webViewURL = "https://www.tooskawood.ir/tooskawood_glaze/"
+            findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
+        }
         binding.imageViewTrainingClasses.setOnClickListener {
             formulaViewModel.webViewURL = "https://www.tooskawood.ir/pottery-academic/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
