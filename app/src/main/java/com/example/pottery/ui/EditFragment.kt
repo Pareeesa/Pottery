@@ -1,8 +1,6 @@
 package com.example.pottery.ui
 
-import android.Manifest
 import android.app.Activity
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -12,13 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.test.core.app.ApplicationProvider
 import com.example.pottery.R
 import com.example.pottery.adapters.ItemAdapter
 import com.example.pottery.databinding.FragmentEditBinding
@@ -27,7 +22,6 @@ import com.example.pottery.room.Item
 import com.example.pottery.viewModels.EditViewModel
 import java.io.IOException
 import java.util.*
-import kotlin.collections.ArrayList
 
 class EditFragment : Fragment() {
 
@@ -77,8 +71,7 @@ class EditFragment : Fragment() {
             }
         }
         binding.btnEditImage.setOnClickListener {
-            if(checkAndRequestPermissions())
-                chooseImage.launch()
+            chooseImage.launch()
         }
         binding.btnSave.setOnClickListener {
             if (binding.etFormulaName.text.isNullOrBlank()){
@@ -130,63 +123,4 @@ class EditFragment : Fragment() {
             false
         }
     }
-    private fun checkAndRequestPermissions(): Boolean {
-        val wExtstorePermission = ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        val cameraPermission = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.CAMERA)
-        val listPermissionsNeeded: MutableList<String> = ArrayList()
-        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.CAMERA)
-        }
-        if (wExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-        if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(requireActivity(), listPermissionsNeeded.toTypedArray(),
-                REQUEST_ID_MULTIPLE_PERMISSIONS)
-            return false
-        }
-        return true
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_ID_MULTIPLE_PERMISSIONS -> when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        ApplicationProvider.getApplicationContext(),
-                        "FlagUp Requires Access to Camara.", Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        ApplicationProvider.getApplicationContext(),
-                        "FlagUp Requires Access to Your Storage.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else -> {
-                    val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-                        if (it != null) {
-                            savePhotoToInternalStorage(it)
-                            binding.ivPicture.setImageBitmap(it)
-                        }
-                    }
-                    chooseImage.launch()
-                }
-            }
-        }
-    }
-
 }

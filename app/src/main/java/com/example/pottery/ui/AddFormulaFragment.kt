@@ -1,8 +1,6 @@
 package com.example.pottery.ui
 
-import android.Manifest
 import android.app.Activity.MODE_PRIVATE
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,12 +10,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.test.core.app.ApplicationProvider
 import com.example.pottery.R
 import com.example.pottery.adapters.NewItemAdapter
 import com.example.pottery.databinding.FragmentAddFormulaBinding
@@ -26,7 +21,6 @@ import com.example.pottery.viewModels.FormulaViewModel
 import com.example.pottery.viewModels.NewItem
 import java.io.IOException
 import java.util.*
-
 
 const val REQUEST_ID_MULTIPLE_PERMISSIONS=10
 class AddFormulaFragment : Fragment() {
@@ -54,8 +48,7 @@ class AddFormulaFragment : Fragment() {
             }
         }
         binding.ivPicture.setOnClickListener {
-            if (checkAndRequestPermissions())
-                chooseImage.launch()
+            chooseImage.launch()
         }
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             if (it != null){
@@ -147,66 +140,6 @@ class AddFormulaFragment : Fragment() {
         }catch (e:IOException){
             e.printStackTrace()
             false
-        }
-    }
-    private fun checkAndRequestPermissions(): Boolean {
-        val wExtstorePermission = ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        val cameraPermission = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.CAMERA)
-        val listPermissionsNeeded: MutableList<String> = ArrayList()
-        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.CAMERA)
-        }
-        if (wExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-        if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(requireActivity(), listPermissionsNeeded.toTypedArray(),
-                REQUEST_ID_MULTIPLE_PERMISSIONS)
-            return false
-        }
-        return true
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_ID_MULTIPLE_PERMISSIONS -> when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        ApplicationProvider.getApplicationContext(),
-                        "FlagUp Requires Access to Camara.", Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        ApplicationProvider.getApplicationContext(),
-                        "FlagUp Requires Access to Your Storage.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else -> {
-                    val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-                        if (it != null) {
-                            val name = UUID.randomUUID().toString()
-                            savePhotoToInternalStorage(name, it)
-                            currentPhotoPath = name
-                            binding.ivPicture.setImageBitmap(it)
-                        }
-                    }
-                    chooseImage.launch()
-                }
-            }
         }
     }
 }
