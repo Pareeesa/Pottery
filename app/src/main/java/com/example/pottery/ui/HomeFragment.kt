@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         activity?.title = "Tooskawood.ir"
         viewModel.formulaList.observe(viewLifecycleOwner) { it ->
             if (it != null) {
-                val adapter = FormulaAdapter({
+                val adapter = FormulaAdapter(requireContext(),{
                     findNavController().navigate(R.id.action_homeFragment_to_formulaFragment)
                 },
                     {
@@ -52,8 +52,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_addFormulaFragment)
         }
     }
-
-    fun deleteFormula(formula: Formula) {
+    private fun deleteFormula(formula: Formula) {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle(resources.getString(R.string.delete_dialog_title))

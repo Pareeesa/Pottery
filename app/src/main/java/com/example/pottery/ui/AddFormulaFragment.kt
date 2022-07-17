@@ -1,9 +1,15 @@
 package com.example.pottery.ui
 
+import android.app.Activity.MODE_PRIVATE
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,11 +19,15 @@ import com.example.pottery.databinding.FragmentAddFormulaBinding
 import com.example.pottery.room.Formula
 import com.example.pottery.viewModels.FormulaViewModel
 import com.example.pottery.viewModels.NewItem
+import java.io.IOException
+import java.util.*
 
+const val REQUEST_ID_MULTIPLE_PERMISSIONS=10
 class AddFormulaFragment : Fragment() {
 
     private lateinit var binding: FragmentAddFormulaBinding
     private val viewModel: FormulaViewModel by viewModels()
+    private var currentPhotoPath = "0"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +39,17 @@ class AddFormulaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val chooseImage = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            if (it != null) {
+                val name = UUID.randomUUID().toString()
+                savePhotoToInternalStorage(name, it)
+                currentPhotoPath = name
+                binding.ivPicture.setImageBitmap(it)
+            }
+        }
+        binding.ivPicture.setOnClickListener {
+            chooseImage.launch()
+        }
         viewModel.itemListLiveData.observe(viewLifecycleOwner) {
             if (it != null){
                 val adapter = NewItemAdapter { item ->
@@ -70,7 +90,7 @@ class AddFormulaFragment : Fragment() {
                 Toast.makeText(requireContext(), R.string.`already_exist_ّFormula`, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            viewModel.insertFormula(Formula(0,binding.etFormulaName.text.toString()))
+            viewModel.insertFormula(Formula(0,binding.etFormulaName.text.toString(),currentPhotoPath))
             viewModel.insertItems(binding.etFormulaName.text.toString())
             findNavController().navigate(R.id.action_addFormulaFragment_to_homeFragment)
             Toast.makeText(requireContext(),R.string.successfully_saved, Toast.LENGTH_SHORT).show()
@@ -110,5 +130,16 @@ class AddFormulaFragment : Fragment() {
         else
             binding.etAmount.text.toString().toDouble()
     }
-
+    private fun savePhotoToInternalStorage(filename:String,bmp:Bitmap):Boolean{
+        return try {
+            context?.openFileOutput("$filename.jpg", MODE_PRIVATE).use { stream->
+                if (!bmp.compress(Bitmap.CompressFormat.JPEG,95,stream))
+                    throw IOException("COULDN'T SAVE BITMAP")
+            }
+            true
+        }catch (e:IOException){
+            e.printStackTrace()
+            false
+        }
+    }
 }

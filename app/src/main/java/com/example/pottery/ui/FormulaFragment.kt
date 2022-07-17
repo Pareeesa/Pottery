@@ -15,6 +15,7 @@ import com.example.pottery.room.Item
 import com.example.pottery.viewModels.FormulaViewModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 
 class FormulaFragment : Fragment() {
@@ -47,7 +48,8 @@ class FormulaFragment : Fragment() {
             for (item in itemsList!!) {
                 total += item.amount
             }
-            binding.textViewTotal.text = total.toString()
+            val newTotal = (total * 10000).roundToInt().toDouble() / 10000
+            binding.textViewTotal.text = newTotal.toString()
         }
         var adapterDetail = DetailAdapter(convertedValueList)
         binding.recyclerViewConvertValues.adapter = adapterDetail

@@ -1,4 +1,4 @@
-package com.example.pottery.ui
+package com.example.pottery.viewModels
 
 import android.app.Application
 import androidx.lifecycle.*

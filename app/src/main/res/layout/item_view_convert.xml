@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="item"
             type="com.example.pottery.room.Item" />
@@ -20,23 +19,34 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:ellipsize="end"
+            android:ems="2"
             android:gravity="center"
-
-            android:text="@{item.material}" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@{item.code}" />
+            android:maxLines="1"
+            android:text="@{item.material}"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:ellipsize="end"
+            android:ems="2"
             android:gravity="center"
-            android:text="@{Double.valueOf(item.amount).toString()}" />
+            android:maxLines="1"
+            android:text="@{item.code}"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:ems="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{Double.valueOf(item.amount).toString()}"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
