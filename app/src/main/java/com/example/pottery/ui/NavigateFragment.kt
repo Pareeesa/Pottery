@@ -1,20 +1,26 @@
 package com.example.pottery.ui
 
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pottery.R
 import com.example.pottery.databinding.FragmentNavigateBinding
+import com.example.pottery.room.FormulaDataBase
 import com.example.pottery.viewModels.FormulaViewModel
+import ir.androidexception.roomdatabasebackupandrestore.Backup
+import ir.androidexception.roomdatabasebackupandrestore.Restore
 
 
 class NavigateFragment : Fragment() {
     private lateinit var binding: FragmentNavigateBinding
     val formulaViewModel: FormulaViewModel by activityViewModels()
+    private val folderMain = "Download"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +77,26 @@ class NavigateFragment : Fragment() {
         binding.imageViewShowPlace.setOnClickListener {
             formulaViewModel.webViewURL = "https://www.tooskawood.ir/event/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
+        }
+        binding.buttonBackup.setOnClickListener {
+            Backup.Init()
+                .database(FormulaDataBase.getDatabase(requireContext()))
+                .path("${Environment.getExternalStorageDirectory()}/$folderMain")
+                .fileName("TooskaWoodBackupFile.txt")
+                .onWorkFinishListener { success, message ->
+                    Toast.makeText(requireContext(), "success", Toast.LENGTH_SHORT).show()
+                }
+                .execute()
+        }
+
+        binding.button2.setOnClickListener {
+            Restore.Init()
+                .database(FormulaDataBase.getDatabase(requireContext()))
+                .backupFilePath("${Environment.getExternalStorageDirectory()}/$folderMain/TooskaWoodBackupFile.txt")
+                .onWorkFinishListener { success, message ->
+                    Toast.makeText(requireContext(), "success restore ", Toast.LENGTH_SHORT).show()
+                }
+                .execute()
         }
     }
 }
