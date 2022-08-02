@@ -1,5 +1,6 @@
 package com.example.pottery.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -79,9 +80,10 @@ class NavigateFragment : Fragment() {
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
         }
         binding.buttonBackup.setOnClickListener {
+            val dir = getDir()
             Backup.Init()
                 .database(FormulaDataBase.getDatabase(requireContext()))
-                .path("${Environment.getExternalStorageDirectory()}/$folderMain")
+                .path(dir)
                 .fileName("TooskaWoodBackupFile.txt")
                 .onWorkFinishListener { success, message ->
                     Toast.makeText(requireContext(), "success", Toast.LENGTH_SHORT).show()
@@ -90,13 +92,23 @@ class NavigateFragment : Fragment() {
         }
 
         binding.button2.setOnClickListener {
+            val dir = getDir()
             Restore.Init()
                 .database(FormulaDataBase.getDatabase(requireContext()))
-                .backupFilePath("${Environment.getExternalStorageDirectory()}/$folderMain/TooskaWoodBackupFile.txt")
+                .backupFilePath("$dir/TooskaWoodBackupFile.txt")
                 .onWorkFinishListener { success, message ->
                     Toast.makeText(requireContext(), "success restore ", Toast.LENGTH_SHORT).show()
                 }
                 .execute()
         }
+    }
+
+    fun getDir(): String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .toString()
+        } else
+            return Environment.getExternalStorageDirectory().toString()
+
     }
 }
