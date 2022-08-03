@@ -153,7 +153,15 @@ class NavigateFragment : Fragment() {
             val file = File(uri?.path)
             val split: List<String> = file.getPath().split(":")
             filePath = split[1]
-            restoreBackup()
+            if (filePath.contains(".txt"))
+                restoreBackup()
+            else
+                Toast.makeText(
+                    requireContext(),
+                    "پسوند فایل قایل قبول نیست! ",
+                    Toast.LENGTH_SHORT
+                ).show()
+
 
         }
     }
