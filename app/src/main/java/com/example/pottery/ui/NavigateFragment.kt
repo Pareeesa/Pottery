@@ -1,6 +1,7 @@
 package com.example.pottery.ui
 
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -22,12 +23,14 @@ import com.example.pottery.room.FormulaDataBase
 import com.example.pottery.viewModels.FormulaViewModel
 import ir.androidexception.roomdatabasebackupandrestore.Backup
 import ir.androidexception.roomdatabasebackupandrestore.Restore
+import java.io.File
 
 
 class NavigateFragment : Fragment() {
     private lateinit var binding: FragmentNavigateBinding
     val formulaViewModel: FormulaViewModel by activityViewModels()
     private val dir = Environment.getExternalStorageDirectory().toString() + "/Download"
+    lateinit var filePath: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,33 +93,12 @@ class NavigateFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                Backup.Init()
-                    .database(FormulaDataBase.getDatabase(requireContext()))
-                    .path(dir)
-                    .fileName("TooskaWoodBackupFile.txt")
-                    .onWorkFinishListener { success, message ->
-                        Toast.makeText(
-                            requireContext(),
-                            "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه دانلود در فایل ها قابل مشاهده و بازیابی است",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    .execute()
+                getBackup()
             }
         }
 
         binding.button2.setOnClickListener {
-            Restore.Init()
-                .database(FormulaDataBase.getDatabase(requireContext()))
-                .backupFilePath("$dir/TooskaWoodBackupFile.txt")
-                .onWorkFinishListener { success, message ->
-                    Toast.makeText(
-                        requireContext(),
-                        "اطلاعات با موفقیت بازیابی شد ",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                .execute()
+            openDialog()
         }
     }
 
@@ -125,4 +107,56 @@ class NavigateFragment : Fragment() {
         val uri: Uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
         startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
     }
+
+    fun getBackup() {
+        Backup.Init()
+            .database(FormulaDataBase.getDatabase(requireContext()))
+            .path(dir)
+            .fileName("TooskaWoodBackupFile.txt")
+            .onWorkFinishListener { success, message ->
+                Toast.makeText(
+                    requireContext(),
+                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه دانلود در فایل ها قابل مشاهده و بازیابی است",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .execute()
+    }
+
+
+    fun restoreBackup() {
+        Restore.Init()
+            .database(FormulaDataBase.getDatabase(requireContext()))
+            .backupFilePath(filePath)
+            .onWorkFinishListener { success, message ->
+                Toast.makeText(
+                    requireContext(),
+                    "اطلاعات با موفقیت بازیابی شد ",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .execute()
+    }
+
+    fun openDialog() {
+        val intent = Intent()
+            .setType("*/*")
+            .setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 111 && resultCode == RESULT_OK) {
+            val uri: Uri? = data?.data
+            val file = File(uri?.path)
+            val split: List<String> = file.getPath().split(":")
+            filePath = split[1]
+            restoreBackup()
+
+        }
+    }
+
+
 }
