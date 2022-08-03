@@ -1,15 +1,21 @@
 package com.example.pottery.ui
 
+
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.pottery.BuildConfig
 import com.example.pottery.R
 import com.example.pottery.databinding.FragmentNavigateBinding
 import com.example.pottery.room.FormulaDataBase
@@ -21,12 +27,7 @@ import ir.androidexception.roomdatabasebackupandrestore.Restore
 class NavigateFragment : Fragment() {
     private lateinit var binding: FragmentNavigateBinding
     val formulaViewModel: FormulaViewModel by activityViewModels()
-    private val folderMain = "Download"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private val dir = Environment.getExternalStorageDirectory().toString() + "/Download"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,36 +80,49 @@ class NavigateFragment : Fragment() {
             formulaViewModel.webViewURL = "https://www.tooskawood.ir/event/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
         }
+
         binding.buttonBackup.setOnClickListener {
-            val dir = getDir()
-            Backup.Init()
-                .database(FormulaDataBase.getDatabase(requireContext()))
-                .path(dir)
-                .fileName("TooskaWoodBackupFile.txt")
-                .onWorkFinishListener { success, message ->
-                    Toast.makeText(requireContext(), "success", Toast.LENGTH_SHORT).show()
-                }
-                .execute()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+                getAccessibility()
+                Toast.makeText(
+                    requireContext(),
+                    "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Backup.Init()
+                    .database(FormulaDataBase.getDatabase(requireContext()))
+                    .path(dir)
+                    .fileName("TooskaWoodBackupFile.txt")
+                    .onWorkFinishListener { success, message ->
+                        Toast.makeText(
+                            requireContext(),
+                            "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه دانلود در فایل ها قابل مشاهده و بازیابی است",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .execute()
+            }
         }
 
         binding.button2.setOnClickListener {
-            val dir = getDir()
             Restore.Init()
                 .database(FormulaDataBase.getDatabase(requireContext()))
                 .backupFilePath("$dir/TooskaWoodBackupFile.txt")
                 .onWorkFinishListener { success, message ->
-                    Toast.makeText(requireContext(), "success restore ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "اطلاعات با موفقیت بازیابی شد ",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 .execute()
         }
     }
 
-    fun getDir(): String {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .toString()
-        } else
-            return Environment.getExternalStorageDirectory().toString()
-
+    @RequiresApi(Build.VERSION_CODES.R)
+    fun getAccessibility() {
+        val uri: Uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+        startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
     }
 }
