@@ -2,7 +2,6 @@ package com.example.pottery.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FormulaDao {
@@ -18,6 +17,9 @@ interface FormulaDao {
 
     @Query("SELECT * FROM Formula")
     fun getAll():LiveData<List<Formula>?>?
+
+    @Query("SELECT * FROM Formula")
+    fun getAllFormulas():List<Formula>
 
     @Query("SELECT * FROM Formula WHERE formulaName = :formulaName")
     fun getFormulaWithItems(formulaName : String ):LiveData<FormulaWithItems>?

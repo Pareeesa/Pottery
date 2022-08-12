@@ -24,6 +24,7 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
     fun insertFormula(formula: Formula) {
         repository.insert(formula)
     }
+    fun getAllFormulas() = repository.getAllFormulas()
 
     fun findFormulaByName(name: String): LiveData<FormulaWithItems>? {
         return repository.findFormulaByName(name)

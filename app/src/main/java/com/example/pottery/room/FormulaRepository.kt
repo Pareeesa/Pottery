@@ -12,6 +12,8 @@ class FormulaRepository(application: Application?) {
         formulaRepository(application)
     }
 
+    fun getAllFormulas() = formulaDao?.getAllFormulas()
+
     private fun formulaRepository(application: Application?) {
         val db = FormulaDataBase.getDatabase(application!!)
         formulaDao = db!!.formulaDao()
