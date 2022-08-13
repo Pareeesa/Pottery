@@ -101,9 +101,17 @@ class NavigateFragment : Fragment() {
                 getBackup()
             }
         }
-
         binding.button2.setOnClickListener {
-            openDialog()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+                getAccessibility()
+                Toast.makeText(
+                    requireContext(),
+                    "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                openDialog()
+            }
         }
     }
 
