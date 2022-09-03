@@ -19,6 +19,9 @@ interface FormulaDao {
     @Query("SELECT * FROM Formula")
     fun getAll():LiveData<List<Formula>?>?
 
+    @Query("SELECT * FROM Formula")
+    fun getAllFormulas():List<Formula>
+
     @Query("SELECT * FROM Formula WHERE formulaName = :formulaName")
     fun getFormulaWithItems(formulaName : String ):LiveData<FormulaWithItems>?
 

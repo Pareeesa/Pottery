@@ -17,6 +17,7 @@ class FormulaRepository(application: Application?) {
         formulaDao = db!!.formulaDao()
         formulaList = formulaDao!!.getAll()
     }
+    fun getAllFormulas()= formulaDao?.getAllFormulas()
 
     fun insert(formula: Formula) = formulaDao?.addFormula(formula)
     fun update(formula: Formula) = formulaDao?.update(formula)
