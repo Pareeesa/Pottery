@@ -75,6 +75,7 @@ class FormulaViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateItem(item: Item) = repository.updateItem(item)
+    fun getAllFormulas() = repository.getAllFormulas()
 
 }
 

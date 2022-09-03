@@ -1,11 +1,14 @@
 package com.example.pottery.ui
 
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,13 +32,16 @@ import com.example.pottery.viewModels.FormulaViewModel
 import ir.androidexception.roomdatabasebackupandrestore.Backup
 import ir.androidexception.roomdatabasebackupandrestore.Restore
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 class NavigateFragment : Fragment() {
     private lateinit var binding: FragmentNavigateBinding
-    val formulaViewModel: FormulaViewModel by activityViewModels()
-    private val dir = Environment.getExternalStorageDirectory().toString() + "/Download"
-    var filePath: String? = null
+    private val formulaViewModel: FormulaViewModel by activityViewModels()
+    private val dir = Environment.getExternalStorageDirectory().toString() + "/TooskaWoodBackUp"
+    private var dbFilePath: String? = null
+    private var imagesPath:String?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,27 +127,52 @@ class NavigateFragment : Fragment() {
         startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
     }
 
-    fun getBackup() {
+    private fun getBackup() {
         Backup.Init()
             .database(FormulaDataBase.getDatabase(requireContext()))
             .path(dir)
             .fileName("TooskaWoodBackupFile.txt")
-            .onWorkFinishListener { success, message ->
+            .onWorkFinishListener { _, _ ->
                 Toast.makeText(
                     requireContext(),
-                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه دانلود در فایل ها قابل مشاهده و بازیابی است",
+                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه TooskaWoodBackU در فایل ها قابل مشاهده و بازیابی است",
                     Toast.LENGTH_SHORT
                 ).show()
             }
             .execute()
+        val files = context?.filesDir?.listFiles()
+        for (i in formulaViewModel.getAllFormulas()!!) {
+            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") && it.name == "${i.imagePath}.jpg" }
+                ?.map {
+                    val bytes = it.readBytes()
+                    val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    saveImageToExternal(bmp, i.imagePath)
+                }
+        }
     }
 
-
-    fun restoreBackup() {
+    private fun saveImageToExternal(finalBitmap: Bitmap, imagePath: String) {
+        val myDir = File("$dir/images")
+        if (!myDir.exists()) {
+            myDir.mkdirs()
+        }
+        val fName = "$imagePath.jpg"
+        val file = File(myDir, fName)
+        if (file.exists()) file.delete()
+        try {
+            val out = FileOutputStream(file)
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            out.flush()
+            out.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    private fun restoreBackup() {
         Restore.Init()
             .database(FormulaDataBase.getDatabase(requireContext()))
-            .backupFilePath(filePath)
-            .onWorkFinishListener { success, message ->
+            .backupFilePath(dbFilePath)
+            .onWorkFinishListener { _, _ ->
                 Toast.makeText(
                     requireContext(),
                     "اطلاعات با موفقیت بازیابی شد ",
@@ -149,9 +180,25 @@ class NavigateFragment : Fragment() {
                 ).show()
             }
             .execute()
+        saveBackUpImagesToInternalStorage()
     }
-
-    fun openDialog() {
+    private fun saveBackUpImagesToInternalStorage() {
+        val file = imagesPath?.let { File(it) }
+        val images = file?.listFiles()
+        for (image in images!!) {
+            try {
+                val filePath = image.path
+                val bitmap = BitmapFactory.decodeFile(filePath)
+                context?.openFileOutput("${image.name}.jpg", Activity.MODE_PRIVATE).use { stream ->
+                    if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream))
+                        throw IOException("COULDN'T SAVE BITMAP")
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    private fun openDialog() {
         val intent = Intent()
             .setType("*/*")
             .setAction(Intent.ACTION_GET_CONTENT)
@@ -164,14 +211,14 @@ class NavigateFragment : Fragment() {
         if (requestCode == 111 && resultCode == RESULT_OK) {
             val uri: Uri? = data?.data
             if (uri != null) {
-                filePath = getRealPathFromURI(requireContext(), uri)
+                dbFilePath = getRealPathFromURI(requireContext(), uri)
+                imagesPath = dbFilePath?.split("TooskaWoodBackupFile.txt")?.get(0) + "images"
                 restoreBackup()
             }
-
         }
     }
 
-    fun getRealPathFromURI(context: Context, uri: Uri): String? {
+    private fun getRealPathFromURI(context: Context, uri: Uri): String? {
         when {
             // DocumentProvider
             DocumentsContract.isDocumentUri(context, uri) -> {
@@ -250,7 +297,7 @@ class NavigateFragment : Fragment() {
         return null
     }
 
-    fun getDataColumn(
+    private fun getDataColumn(
         context: Context, uri: Uri?, selection: String?,
         selectionArgs: Array<String>?
     ): String? {
@@ -276,7 +323,7 @@ class NavigateFragment : Fragment() {
     }
 
 
-    fun getFilePath(context: Context, uri: Uri?): String? {
+    private fun getFilePath(context: Context, uri: Uri?): String? {
         var cursor: Cursor? = null
         val projection = arrayOf(
             MediaStore.MediaColumns.DISPLAY_NAME
@@ -301,7 +348,7 @@ class NavigateFragment : Fragment() {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    fun isExternalStorageDocument(uri: Uri): Boolean {
+    private fun isExternalStorageDocument(uri: Uri): Boolean {
         return "com.android.externalstorage.documents" == uri.authority
     }
 
@@ -309,7 +356,7 @@ class NavigateFragment : Fragment() {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    fun isDownloadsDocument(uri: Uri): Boolean {
+    private fun isDownloadsDocument(uri: Uri): Boolean {
         return "com.android.providers.downloads.documents" == uri.authority
     }
 
@@ -317,7 +364,7 @@ class NavigateFragment : Fragment() {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    fun isMediaDocument(uri: Uri): Boolean {
+    private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
     }
 
@@ -325,7 +372,7 @@ class NavigateFragment : Fragment() {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Photos.
      */
-    fun isGooglePhotosUri(uri: Uri): Boolean {
+    private fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
     }
 
