@@ -1,6 +1,5 @@
 package com.example.pottery.ui
 
-
 import android.app.Activity.RESULT_OK
 import android.content.ContentUris
 import android.content.ContentValues.TAG
@@ -21,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -36,7 +36,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-
 
 class NavigateFragment : Fragment() {
     private lateinit var binding: FragmentNavigateBinding
@@ -137,7 +136,7 @@ class NavigateFragment : Fragment() {
             .onWorkFinishListener { _, _ ->
                 Toast.makeText(
                     requireContext(),
-                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه TooskaWoodBackU در فایل ها قابل مشاهده و بازیابی است",
+                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه TooskaWoodBackUp در فایل ها قابل مشاهده و بازیابی است",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -153,6 +152,25 @@ class NavigateFragment : Fragment() {
         }
     }
 
+    private fun openDialog() {
+        val intent = Intent()
+            .setType("*/*")
+            .setAction(Intent.ACTION_GET_CONTENT)
+        getResult.launch(intent)
+
+    }
+    private val getResult =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == RESULT_OK){
+                val uri: Uri? = it?.data?.data
+                if (uri != null) {
+                    dbFilePath = getRealPathFromURI(requireContext(), uri)
+                    imagesPath = dbFilePath?.split("TooskaWoodBackupFile.txt")?.get(0) + "images"
+                    restoreBackup()
+                }
+            }
+        }
     private fun saveImageToExternal(finalBitmap: Bitmap, imagePath: String) {
         val myDir = File("$dir/images")
         if (!myDir.exists()) {
@@ -190,18 +208,14 @@ class NavigateFragment : Fragment() {
         for (image in images!!) {
             try {
                 val filePath = image.path
-                storeImage(BitmapFactory.decodeFile(filePath),image.name)
+                storeImageToInternal(BitmapFactory.decodeFile(filePath),image.name)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
-    private fun storeImage(image: Bitmap,name:String) {
+    private fun storeImageToInternal(image: Bitmap, name:String) {
         val pictureFile = File(context!!.filesDir, name)
-        if (pictureFile == null) {
-            Log.d(TAG, "Error creating media file, check storage permissions: ")
-            return
-        }
         try {
             val fos = FileOutputStream(pictureFile)
             image.compress(Bitmap.CompressFormat.PNG, 90, fos)
@@ -210,25 +224,6 @@ class NavigateFragment : Fragment() {
             Log.d(TAG, "File not found: " + e.message)
         } catch (e: IOException) {
             Log.d(TAG, "Error accessing file: " + e.message)
-        }
-    }
-    private fun openDialog() {
-        val intent = Intent()
-            .setType("*/*")
-            .setAction(Intent.ACTION_GET_CONTENT)
-        startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 111 && resultCode == RESULT_OK) {
-            val uri: Uri? = data?.data
-            if (uri != null) {
-                dbFilePath = getRealPathFromURI(requireContext(), uri)
-                imagesPath = dbFilePath?.split("TooskaWoodBackupFile.txt")?.get(0) + "images"
-                restoreBackup()
-            }
         }
     }
 
