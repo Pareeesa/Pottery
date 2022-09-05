@@ -16,14 +16,15 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.pottery.BuildConfig
 import com.example.pottery.R
@@ -42,7 +43,7 @@ class NavigateFragment : Fragment() {
     private val formulaViewModel: FormulaViewModel by activityViewModels()
     private val dir = Environment.getExternalStorageDirectory().toString() + "/TooskaWoodBackUp"
     private var dbFilePath: String? = null
-    private var imagesPath:String?= null
+    private var imagesPath: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +55,46 @@ class NavigateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.navigate_fragment_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_backup -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+                            getAccessibility()
+                            Toast.makeText(
+                                requireContext(),
+                                "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            getBackup()
+                        }
+                        true
+                    }
+                    R.id.menu_restore -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+                            getAccessibility()
+                            Toast.makeText(
+                                requireContext(),
+                                "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            openDialog()
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         binding.imageViewInsert.setOnClickListener {
             findNavController().navigate(R.id.action_navigateFragment_to_addFormulaFragment)
         }
@@ -95,31 +136,6 @@ class NavigateFragment : Fragment() {
             formulaViewModel.webViewURL = "https://www.tooskawood.ir/event/"
             findNavController().navigate(R.id.action_navigateFragment_to_webViewFragment)
         }
-
-        binding.buttonBackup.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-                getAccessibility()
-                Toast.makeText(
-                    requireContext(),
-                    "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                getBackup()
-            }
-        }
-        binding.button2.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-                getAccessibility()
-                Toast.makeText(
-                    requireContext(),
-                    "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                openDialog()
-            }
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -159,10 +175,12 @@ class NavigateFragment : Fragment() {
         getResult.launch(intent)
 
     }
+
     private val getResult =
         registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == RESULT_OK){
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == RESULT_OK) {
                 val uri: Uri? = it?.data?.data
                 if (uri != null) {
                     dbFilePath = getRealPathFromURI(requireContext(), uri)
@@ -171,6 +189,7 @@ class NavigateFragment : Fragment() {
                 }
             }
         }
+
     private fun saveImageToExternal(finalBitmap: Bitmap, imagePath: String) {
         val myDir = File("$dir/images")
         if (!myDir.exists()) {
@@ -188,6 +207,7 @@ class NavigateFragment : Fragment() {
             e.printStackTrace()
         }
     }
+
     private fun restoreBackup() {
         Restore.Init()
             .database(FormulaDataBase.getDatabase(requireContext()))
@@ -202,19 +222,21 @@ class NavigateFragment : Fragment() {
             .execute()
         saveBackUpImagesToInternalStorage()
     }
+
     private fun saveBackUpImagesToInternalStorage() {
         val file = imagesPath?.let { File(it) }
         val images = file?.listFiles()
         for (image in images!!) {
             try {
                 val filePath = image.path
-                storeImageToInternal(BitmapFactory.decodeFile(filePath),image.name)
+                storeImageToInternal(BitmapFactory.decodeFile(filePath), image.name)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
-    private fun storeImageToInternal(image: Bitmap, name:String) {
+
+    private fun storeImageToInternal(image: Bitmap, name: String) {
         val pictureFile = File(context!!.filesDir, name)
         try {
             val fos = FileOutputStream(pictureFile)
