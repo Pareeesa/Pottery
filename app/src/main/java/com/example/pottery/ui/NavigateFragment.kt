@@ -1,9 +1,9 @@
 package com.example.pottery.ui
 
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ContentUris
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -16,6 +16,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ import com.example.pottery.viewModels.FormulaViewModel
 import ir.androidexception.roomdatabasebackupandrestore.Backup
 import ir.androidexception.roomdatabasebackupandrestore.Restore
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -188,14 +190,26 @@ class NavigateFragment : Fragment() {
         for (image in images!!) {
             try {
                 val filePath = image.path
-                val bitmap = BitmapFactory.decodeFile(filePath)
-                context?.openFileOutput("${image.name}.jpg", Activity.MODE_PRIVATE).use { stream ->
-                    if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream))
-                        throw IOException("COULDN'T SAVE BITMAP")
-                }
+                storeImage(BitmapFactory.decodeFile(filePath),image.name)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+        }
+    }
+    private fun storeImage(image: Bitmap,name:String) {
+        val pictureFile = File(context!!.filesDir, name)
+        if (pictureFile == null) {
+            Log.d(TAG, "Error creating media file, check storage permissions: ")
+            return
+        }
+        try {
+            val fos = FileOutputStream(pictureFile)
+            image.compress(Bitmap.CompressFormat.PNG, 90, fos)
+            fos.close()
+        } catch (e: FileNotFoundException) {
+            Log.d(TAG, "File not found: " + e.message)
+        } catch (e: IOException) {
+            Log.d(TAG, "Error accessing file: " + e.message)
         }
     }
     private fun openDialog() {
