@@ -29,4 +29,9 @@
         <item name="android:background">@drawable/number_item_selector</item>
     </style>
 
+
+    <style name="AlertDialogCustom" parent="MaterialAlertDialog.Material3">
+        <item name="android:layoutDirection">rtl</item>
+    </style>
+
 </resources>

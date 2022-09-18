@@ -20,6 +20,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -31,6 +32,7 @@ import com.example.pottery.R
 import com.example.pottery.databinding.FragmentNavigateBinding
 import com.example.pottery.room.FormulaDataBase
 import com.example.pottery.viewModels.FormulaViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ir.androidexception.roomdatabasebackupandrestore.Backup
 import ir.androidexception.roomdatabasebackupandrestore.Restore
 import java.io.File
@@ -66,12 +68,10 @@ class NavigateFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_backup -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-                            getAccessibility()
-                            Toast.makeText(
-                                requireContext(),
-                                "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showDialogForAccessibility(
+                                "دسترسی ها جهت نسخه پشتیبان ",
+                                "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید"
+                            )
                         } else {
                             getBackup()
                         }
@@ -79,14 +79,12 @@ class NavigateFragment : Fragment() {
                     }
                     R.id.menu_restore -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-                            getAccessibility()
-                            Toast.makeText(
-                                requireContext(),
-                                "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره نسخه پشتیبان تهیه کنید",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showDialogForAccessibility(
+                                "دسترسی ها جهت بازیابی نسخه پشتیبان",
+                                "لطفا ابتدا دسترسی مربوطه را به نرم افزار بدهید و سپس دوباره جهت بازیابی اقدام کنید"
+                            )
                         } else {
-                            openDialog()
+                            openFileDialog()
                         }
                         true
                     }
@@ -144,17 +142,37 @@ class NavigateFragment : Fragment() {
         startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
     }
 
+
+    private fun showDialog(title: String, message: String): AlertDialog? {
+        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("تایید") { dialog, which ->
+            }
+            .show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun showDialogForAccessibility(title: String, message: String): AlertDialog? {
+        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("تایید") { dialog, which ->
+                getAccessibility()
+            }
+            .show()
+    }
+
     private fun getBackup() {
         Backup.Init()
             .database(FormulaDataBase.getDatabase(requireContext()))
             .path(dir)
             .fileName("TooskaWoodBackupFile.txt")
             .onWorkFinishListener { _, _ ->
-                Toast.makeText(
-                    requireContext(),
-                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه TooskaWoodBackUp در فایل ها قابل مشاهده و بازیابی است",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showDialog(
+                    "تهیه نسخه پشتیبان موفقیت آمیز بود",
+                    "تهیه نسخه پشنتیبان موفقیت آمیز بود، این نسخه در پوشه TooskaWoodBackUp در محل ذخیره سازی  فایل ها قابل مشاهده و بازیابی است"
+                )
             }
             .execute()
         val files = context?.filesDir?.listFiles()
@@ -168,7 +186,7 @@ class NavigateFragment : Fragment() {
         }
     }
 
-    private fun openDialog() {
+    private fun openFileDialog() {
         val intent = Intent()
             .setType("*/*")
             .setAction(Intent.ACTION_GET_CONTENT)
@@ -237,7 +255,7 @@ class NavigateFragment : Fragment() {
     }
 
     private fun storeImageToInternal(image: Bitmap, name: String) {
-        val pictureFile = File(context!!.filesDir, name)
+        val pictureFile = File(requireContext().filesDir, name)
         try {
             val fos = FileOutputStream(pictureFile)
             image.compress(Bitmap.CompressFormat.PNG, 90, fos)
