@@ -19,7 +19,6 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -136,15 +135,16 @@ class NavigateFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
     fun getAccessibility() {
-        val uri: Uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
-        startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
+        if (Build.VERSION.SDK_INT > 21) {
+            val uri: Uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+            startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
+        }
     }
 
 
     private fun showDialog(title: String, message: String): AlertDialog? {
-        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
+        return MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogCustom)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton("تایید") { dialog, which ->
@@ -152,9 +152,8 @@ class NavigateFragment : Fragment() {
             .show()
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
     private fun showDialogForAccessibility(title: String, message: String): AlertDialog? {
-        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
+        return MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogCustom)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton("تایید") { dialog, which ->
